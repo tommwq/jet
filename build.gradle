@@ -1,0 +1,52 @@
+buildscript {
+    repositories {
+        maven {
+            url "http://maven.aliyun.com/nexus/content/groups/public"
+        }
+        jcenter()
+    }
+}
+
+allprojects {
+    repositories {
+        maven {
+            url "http://maven.aliyun.com/nexus/content/groups/public"
+        }
+        jcenter()
+    }
+}
+
+apply plugin: 'java'
+
+archivesBaseName = 'jet'
+group = 'com.tq'
+version = '0.1.0'
+
+ext {
+    junitJupiterVersion = "5.1.0"
+    artifactId = 'jet'
+}
+
+tasks.withType(JavaCompile) {  
+    options.encoding = "UTF-8"  
+}
+
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}"
+}
+
+repositories {
+    maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+}
+
+javadoc {  
+    options{
+        encoding "UTF-8"
+        charSet 'UTF-8'
+    }
+}
