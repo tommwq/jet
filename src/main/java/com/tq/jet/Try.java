@@ -3,112 +3,136 @@ package com.tq.jet;
 import java.util.ArrayList;
 import java.util.function.Function;
 
-/**
- * 为简化try-cache结构引入的辅助类。
- */
-public class Try<In, Out> {
-    private Function<In, Out> function = null;
-    private Function<Throwable, Void> exceptionHandler = null;
-    private ArrayList<Class> ignoreList = new ArrayList<>();
-    private Class rethrowException = null;
+public class Try {
+    public static ExceptionHandler defaultExceptionHandler = new ExceptionIgnorer();
 
-    /**
-     * 建立Try对象。
-     * @param function 要执行的函数。
-     */
-    public Try(Function<In, Out> function) {
-        this.function = function;
+    public static void execute(Command command) {
+        execute(command, defaultExceptionHandler);
     }
 
-    /**
-     * 执行函数，得到返回值。
-     * @param in 传递给函数的参数。
-     * @param defaultResult 异常时的默认返回值。
-     * @return 如果出现异常，返回defaultResult。否则返回函数结果。
-     */
-    public Out go(In in, Out defaultResult) {
-        if (function == null) {
-            return defaultResult;
-        }
-
-        Out result = defaultResult;
-
+    public static void execute(Command command, ExceptionHandler handler) {
         try {
-            result = function.apply(in);
-        } catch (Exception e) {
-            onException(e);
+            command.execute();
+        } catch (Throwable e) {
+            if (handler != null) {
+                handler.handleException(e);
+            }
+        }
+    }
+
+    public static <T, R> R execute(Function<T, R> function, T inputValue, R defaultResult) {
+        return execute(function, inputValue, defaultResult, defaultExceptionHandler);
+    }
+
+    public static <T, R> R execute(Function<T, R> function, T inputValue, R defaultResult, ExceptionHandler handler) {
+        R result = defaultResult;
+        try {
+            result = function.execute(inputValue);
+        } catch (Throwable e) {
+            if (handler != null) {
+                handler.handleException(e);
+            }
         }
 
         return result;
     }
 
-    /**
-     * 设置异常处理句柄。
-     * @param exceptionHandler 异常处理句柄。
-     * @return Try自身
-     */
-    public Try exception(Function<Throwable, Void> exceptionHandler) {
-        this.exceptionHandler = exceptionHandler;
-        return this;
+    public static <T> void execute(Consumer<T> consumer, T inputValue) {
+        execute(consumer, inputValue, defaultExceptionHandler);
     }
 
-    /**
-     * 忽略函数执行中的异常。
-     * @return Try自身
-     */
-    public Try skipError() {
-        exceptionHandler = null;
-        return this;
-    }
-
-    /**
-     * 忽略函数执行中的特定异常。
-     * @param errorClass 忽略的异常。
-     * @return Try自身
-     */
-    public Try skipError(Class errorClass) {
-        ignoreList.add(errorClass);
-        return this;
-    }
-
-    /**
-     * 封装并重新抛出异常。
-     *
-     * 如果函数执行中发送异常，并且该异常不再忽略清单中，而又没有设置异常处理句柄，Try将封装并重新抛出异常。
-     * 如果封装异常的过程失败，go()会抛出一个RuntimeException。
-     *
-     * @param errorClass 当函数执行发送异常时，Try对象抛出的异常。
-     *                   errorClass必须是RuntimeException或其派生类，并提供带有Throwable参数的构造函数。
-     * @return Try自身
-     * @see exception()
-     */
-    public Try rethrow(Class errorClass) {
-        rethrowException = errorClass;
-        return this;
-    }
-
-    private void onException(Throwable error) {
-        if (exceptionHandler == null && rethrowException == null) {
-           return;
+    public static <T> void execute(Consumer<T> consumer, T inputValue, ExceptionHandler handler) {
+        try {
+            consumer.execute(inputValue);
+        } catch (Throwable e) {
+            if (handler != null) {
+                handler.handleException(e);
+            }
         }
+    }
 
-        for (Class clazz: ignoreList) {
-            if (clazz.getName().equals(error.getClass().getName())) {
-                return;
+    public static <R> R execute(Producer<R> producer, R defaultResult) {
+        return execute(producer, defaultResult, defaultExceptionHandler);
+    }
+
+    public static <R> R execute(Producer<R> producer, R defaultResult, ExceptionHandler handler) {
+        R result = defaultResult;
+        try {
+            result = producer.execute();
+        } catch (Throwable e) {
+            if (handler != null) {
+                handler.handleException(e);
             }
         }
 
-        if (exceptionHandler != null) {
-            exceptionHandler.apply(error);
+        return result;
+    }
+
+    public static RuntimeExceptionWrapper runtimeExceptionWrapper() {
+        return new RuntimeExceptionWrapper();
+    }
+
+    public interface ExceptionHandler {
+        void handleException(Throwable e) throws RuntimeException;
+    }
+
+    public interface Command {
+        void execute() throws Exception;
+    }
+
+    public interface Function<T, R> {
+        R execute(T t) throws Exception;
+    }
+
+    public interface Consumer<T> {
+        void execute(T t) throws Exception;
+    }
+
+    public interface Producer<R> {
+        R execute() throws Exception;
+    }
+
+    public interface ExceptionProducer extends Producer<Exception> {
+    }
+
+    public static class StackTracePrinter implements ExceptionHandler {
+        @Override
+        public void handleException(Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static class ExceptionIgnorer implements ExceptionHandler {
+        @Override
+        public void handleException(Throwable e) {
+            // ignore
+        }
+    }
+
+    public static class UserDefinedExceptionWrapper implements ExceptionHandler {
+        private ExceptionProducer producer;
+
+        public UserDefinedExceptionWrapper(ExceptionProducer producer) {
+            this.producer = producer;
         }
 
-        RuntimeException exception = null;
-        try {
-            exception = (RuntimeException) rethrowException.getConstructor(Throwable.class).newInstance(error);
-        } catch (Exception e) {
-            exception = new RuntimeException(e);
-        }
+        @Override
+        public void handleException(Throwable e) {
+            RuntimeException exception;
+            try {
+                exception = new RuntimeException(producer.execute());
+            } catch (Exception error) {
+                exception = new RuntimeException(error);
+            }
 
-        throw exception;
+            throw exception;
+        }
+    }
+
+    public static class RuntimeExceptionWrapper implements ExceptionHandler {
+        @Override
+        public void handleException(Throwable e) {
+            throw new RuntimeException(e);
+        }
     }
 }
