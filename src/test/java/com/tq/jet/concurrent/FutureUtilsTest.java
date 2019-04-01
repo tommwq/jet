@@ -1,10 +1,11 @@
-package com.tq.util.concurrent;
+package com.tq.jet.concurrent;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import org.junit.jupiter.api.Test;
 
-import com.tq.util.function.Function;
+import com.tq.jet.util.Function;
 
 class FutureUtilsTest {
         @Test

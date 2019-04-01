@@ -1,6 +1,6 @@
 package com.tq.jet;
 
-import com.tq.jet.function.Function;
+import com.tq.jet.util.Function;
 
 /**
  * 启动新线程执行函数。

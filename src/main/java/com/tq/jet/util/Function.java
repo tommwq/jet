@@ -5,7 +5,7 @@
  * 2017年1月24日。
  */
 
-package com.tq.jet.function;
+package com.tq.jet.util;
 
 /**
  * Function函数对象

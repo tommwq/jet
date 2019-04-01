@@ -5,7 +5,7 @@ import com.tq.jet.reflect.FieldGetter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import com.tq.jet.function.Function;
+import com.tq.jet.util.Function;
 
 @SuppressWarnings("unused")
 public class KeyValueTable {

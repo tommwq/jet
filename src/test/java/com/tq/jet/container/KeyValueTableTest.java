@@ -1,4 +1,4 @@
-package com.tq.util.container;
+package com.tq.jet.container;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.tq.util.function.Function;
+import com.tq.jet.util.Function;
 
 public class KeyValueTableTest {
 

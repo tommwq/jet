@@ -10,12 +10,11 @@ package com.tq.jet.concurrent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiFunction;
-import com.tq.jet.function.Function;
+
+import com.tq.jet.util.Function;
 
 // TODO 改为使用内部匿名类。
 public class FutureUtils {
