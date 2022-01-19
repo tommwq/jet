@@ -1,7 +1,5 @@
 package com.tommwq.jet.runtime;
 
-import com.tommwq.jet.util.OperatingSystem;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,6 +1,6 @@
 package com.tommwq.jet.event;
 
-import com.tommwq.jet.util.RingBuffer;
+import com.tommwq.jet.container.RingBuffer;
 
 import java.util.ArrayList;
 

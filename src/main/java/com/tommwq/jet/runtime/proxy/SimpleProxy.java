@@ -1,4 +1,4 @@
-package com.tommwq.jet.util.proxy;
+package com.tommwq.jet.runtime.proxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

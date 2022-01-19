@@ -1,4 +1,4 @@
-package com.tommwq.jet.util;
+package com.tommwq.jet.datatype;
 
 /**
  * 比较结果。

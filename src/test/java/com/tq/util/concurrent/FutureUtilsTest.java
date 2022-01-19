@@ -7,9 +7,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-class FutureUtilsTest {
+public class FutureUtilsTest {
     @Test
-    void sequence() {
+    public void sequence() {
         // calculate (1 + 2) * 3
         try {
             int result = FutureUtils.sequence(1, new Function<Integer, Integer>() {

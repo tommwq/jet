@@ -1,8 +1,8 @@
 package com.tommwq.jet.database;
 
-import com.tommwq.jet.routine.Call;
-import com.tommwq.jet.util.DataTypes;
-import com.tommwq.jet.util.Objects;
+import com.tommwq.jet.datatype.DataType;
+import com.tommwq.jet.function.Call;
+import com.tommwq.jet.runtime.reflect.ReflectUtils;
 
 import java.lang.reflect.Field;
 import java.sql.*;
@@ -12,34 +12,35 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class DatabaseConnection {
+public abstract class DatabaseHelper {
 
-    protected DataTypeConverter dataTypeConverter;
+    protected SqlDataTypeTranslator dataTypeTranslater;
     protected Connection connection;
     protected SQLStringEscaper stringEscaper;
-    public DatabaseConnection(Connection aConnection, DataTypeConverter aDataTypeConverter, SQLStringEscaper aSQLStringEscaper) {
+
+    public DatabaseHelper(Connection aConnection, SqlDataTypeTranslator aDataTypeTranslater, SQLStringEscaper aStringEscaper) {
         connection = aConnection;
-        dataTypeConverter = aDataTypeConverter;
-        stringEscaper = aSQLStringEscaper;
+        dataTypeTranslater = aDataTypeTranslater;
+        stringEscaper = aStringEscaper;
     }
 
     public abstract boolean tableExist(String tableName) throws SQLException;
 
-    public DatabaseConnection createTable(String createTableSQL) throws SQLException {
+    public DatabaseHelper createTable(String createTableSQL) throws SQLException {
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(createTableSQL);
         }
         return this;
     }
 
-    public DatabaseConnection createTableInNeed(String tableName, String createTableSQL) throws SQLException {
+    public DatabaseHelper createTableInNeed(String tableName, String createTableSQL) throws SQLException {
         if (!tableExist(tableName)) {
             createTable(createTableSQL);
         }
         return this;
     }
 
-    public DatabaseConnection createTableInNeed(Class clazz) throws SQLException {
+    public DatabaseHelper createTableInNeed(Class clazz) throws SQLException {
         createTableInNeed(clazz.getSimpleName(), createTableSQL(clazz));
         return this;
     }
@@ -58,7 +59,7 @@ public abstract class DatabaseConnection {
         builder.append(String.join(",", Stream.of(clazz.getDeclaredFields())
                 .map(field -> String.format("%s %s",
                         field.getName(),
-                        dataTypeConverter.toDataType(field.getType())))
+                        dataTypeTranslater.toSqlType(field.getType())))
                 .collect(Collectors.toList())));
 
         builder.append(")");
@@ -94,16 +95,16 @@ public abstract class DatabaseConnection {
                         .map(field -> {
                             try {
                                 Class type = field.getType();
-                                Object value = Objects.fieldValue(object, field);
+                                Object value = ReflectUtils.fieldValue(object, field);
                                 String valueString = value == null ? "null" : value.toString();
-                                if (DataTypes.isString(type)) {
+                                if (DataType.isString(type)) {
                                     valueString = "\"" + escape(valueString) + "\"";
                                 }
-                                if (DataTypes.isBoolean(type)) {
-                                    valueString = String.valueOf(DataTypes.booleanToInt((boolean) value));
+                                if (DataType.isBoolean(type)) {
+                                    valueString = String.valueOf(DataType.booleanToInt((boolean) value));
                                 }
-                                if (DataTypes.isEnum(type)) {
-                                    valueString = String.valueOf(DataTypes.enumToInt((Enum) value));
+                                if (DataType.isEnum(type)) {
+                                    valueString = String.valueOf(DataType.enumToInt((Enum) value));
                                 }
                                 return valueString;
                             } catch (NoSuchFieldException e) {
@@ -131,16 +132,16 @@ public abstract class DatabaseConnection {
                             try {
                                 Class type = field.getType();
                                 String fieldName = field.getName();
-                                Object value = Objects.fieldValue(object, field);
+                                Object value = ReflectUtils.fieldValue(object, field);
                                 String valueString = value == null ? "null" : value.toString();
-                                if (DataTypes.isString(type)) {
+                                if (DataType.isString(type)) {
                                     valueString = "\"" + escape(valueString) + "\"";
                                 }
-                                if (DataTypes.isBoolean(type)) {
-                                    valueString = String.valueOf(DataTypes.booleanToInt((boolean) value));
+                                if (DataType.isBoolean(type)) {
+                                    valueString = String.valueOf(DataType.booleanToInt((boolean) value));
                                 }
-                                if (DataTypes.isEnum(type)) {
-                                    valueString = String.valueOf(DataTypes.enumToInt((Enum) value));
+                                if (DataType.isEnum(type)) {
+                                    valueString = String.valueOf(DataType.enumToInt((Enum) value));
                                 }
                                 return String.format("%s=%s", fieldName, valueString);
                             } catch (NoSuchFieldException e) {
@@ -235,20 +236,20 @@ public abstract class DatabaseConnection {
                 String name = field.getName();
                 Object value = null;
 
-                if (DataTypes.isString(type)) {
+                if (DataType.isString(type)) {
                     value = resultSet.getString(name);
                 }
-                if (DataTypes.isLong(type)) {
+                if (DataType.isLong(type)) {
                     value = resultSet.getLong(name);
                 }
-                if (DataTypes.isInteger(type)) {
+                if (DataType.isInteger(type)) {
                     value = resultSet.getInt(name);
                 }
-                if (DataTypes.isEnum(type)) {
-                    value = DataTypes.intToEnum(resultSet.getInt(name), type);
+                if (DataType.isEnum(type)) {
+                    value = DataType.intToEnum(resultSet.getInt(name), type);
                 }
                 if (value != null) {
-                    Objects.setDeclaredField(element, field, value);
+                    ReflectUtils.setDeclaredField(element, field, value);
                 }
             }
 

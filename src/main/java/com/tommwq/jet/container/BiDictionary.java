@@ -8,7 +8,7 @@ import java.util.HashMap;
  * @param <K> 键类型
  * @param <V> 值类型
  */
-public class BidirectionalMap<K, V> {
+public class BiDictionary<K, V> {
 
     private HashMap<K, V> table1 = new HashMap<>();
     private HashMap<V, K> table2 = new HashMap<>();

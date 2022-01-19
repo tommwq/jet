@@ -2,7 +2,7 @@ package com.tommwq.jet.container;
 
 import com.tommwq.jet.function.Call;
 import com.tommwq.jet.function.FallibleFunction;
-import com.tommwq.jet.runtime.reflect.ReflectUtil;
+import com.tommwq.jet.runtime.reflect.ReflectUtils;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -69,7 +69,7 @@ public class MapUtils {
     public static <K, V1, V2> Map<K, V2> project(Map<K, V1> map, @SuppressWarnings("SameParameterValue") String valueFieldName) throws RuntimeException {
         Map<K, V2> projected = new HashMap<>();
         for (Map.Entry<K, V1> entry : map.entrySet()) {
-            projected.put(entry.getKey(), (V2) new Call((Void) -> ReflectUtil.declaredFieldValue(entry.getValue(), valueFieldName), null, null).result());
+            projected.put(entry.getKey(), (V2) new Call((Void) -> ReflectUtils.declaredFieldValue(entry.getValue(), valueFieldName), null, null).result());
         }
 
         return projected;
@@ -95,7 +95,7 @@ public class MapUtils {
 
         Map<K, V> map = new HashMap<>();
         for (V item : items) {
-            K key = (K) new Call((Void) -> ReflectUtil.declaredFieldValue(item, fieldName), null, null).result();
+            K key = (K) new Call((Void) -> ReflectUtils.declaredFieldValue(item, fieldName), null, null).result();
             if (key != null) {
                 map.put(key, item);
             }

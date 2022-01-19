@@ -2,7 +2,7 @@ package com.tommwq.jet.container;
 
 import com.tommwq.jet.function.Call;
 import com.tommwq.jet.function.FallibleFunction;
-import com.tommwq.jet.runtime.reflect.FieldGetter;
+import com.tommwq.jet.runtime.reflect.ReflectUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +21,7 @@ public class LinearTable {
 
         for (T t : items) {
             try {
-                if (FieldGetter.get(t, field).equals(value)) {
+                if (ReflectUtils.getField(t, field).equals(value)) {
                     selected.add(t);
                 }
             } catch (Exception e) { /* ignore */ }
@@ -37,7 +37,7 @@ public class LinearTable {
         for (T t : items) {
             try {
                 //noinspection unchecked
-                if (FieldGetter.get(t, field).equals(value)) {
+                if (ReflectUtils.getField(t, field).equals(value)) {
                     selected.add(t);
                 }
             } catch (Exception e) { /* ignore */ }

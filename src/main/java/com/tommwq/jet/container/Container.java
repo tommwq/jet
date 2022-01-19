@@ -1,7 +1,7 @@
 package com.tommwq.jet.container;
 
 import com.tommwq.jet.function.Call;
-import com.tommwq.jet.runtime.reflect.ReflectUtil;
+import com.tommwq.jet.runtime.reflect.ReflectUtils;
 
 import java.util.*;
 
@@ -51,19 +51,19 @@ public class Container {
 
         String[] piece = fullFieldName.split(dot, 2);
         if (piece.length == 1) {
-            new Call(() -> ReflectUtil.setDeclaredFieldString(object,
+            new Call(() -> ReflectUtils.setDeclaredFieldString(object,
                     fullFieldName,
                     (String) value));
             return;
         }
 
         final String fieldName = piece[0];
-        if (!ReflectUtil.containDeclaredField(object, fieldName)) {
+        if (!ReflectUtils.containDeclaredField(object, fieldName)) {
             return;
         }
 
         final String memberFieldName = piece[1];
-        new Call(() -> fillObject(ReflectUtil.initializeDeclaredFieldInNeed(object, fieldName),
+        new Call(() -> fillObject(ReflectUtils.initializeDeclaredFieldInNeed(object, fieldName),
                 memberFieldName,
                 value)).abortWhenError();
     }

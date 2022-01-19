@@ -1,7 +1,9 @@
-package com.tommwq.jet.util;
+package com.tommwq.jet.container;
 
 import com.tommwq.jet.routine.Call;
 import com.tommwq.jet.routine.FallibleFunction;
+import com.tommwq.jet.runtime.reflect.ClassUtils;
+import com.tommwq.jet.runtime.reflect.ReflectUtils;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -9,7 +11,7 @@ import java.util.function.Predicate;
 /**
  * 容器辅助函数。
  */
-// TODO 更名为 Containers。
+// TODO 和 Container、MapUtils 合并。
 public class Collections {
     public static Map<Object, Object> createMap(Object... keyvalues) {
         Map<Object, Object> result = new HashMap<>();
@@ -27,7 +29,7 @@ public class Collections {
     }
 
     public static Map<Object, Object> createMap(Class<? extends Map> mapClass, Object... keyvalues) throws InstantiationException, IllegalAccessException {
-        Map<Object, Object> result = Classes.create(mapClass);
+        Map<Object, Object> result = ClassUtils.create(mapClass);
 
         for (int i = 0; i < keyvalues.length; i += 2) {
             Object key = keyvalues[i];
@@ -85,19 +87,19 @@ public class Collections {
 
         String[] piece = fullFieldName.split(dot, 2);
         if (piece.length == 1) {
-            new Call(() -> Objects.setDeclaredFieldString(object,
+            new Call(() -> ReflectUtils.setDeclaredFieldString(object,
                     fullFieldName,
                     (String) value));
             return;
         }
 
         final String fieldName = piece[0];
-        if (!Objects.containDeclaredField(object, fieldName)) {
+        if (!ReflectUtils.containDeclaredField(object, fieldName)) {
             return;
         }
 
         final String memberFieldName = piece[1];
-        new Call(() -> fill(Objects.initializeDeclaredFieldInNeed(object, fieldName),
+        new Call(() -> fill(ReflectUtils.initializeDeclaredFieldInNeed(object, fieldName),
                 memberFieldName,
                 value)).abortWhenError();
     }
@@ -107,7 +109,6 @@ public class Collections {
      *
      * @param <K>       键类型
      * @param <V>       值类型
-     * @param pairs     字典
      * @param predicate 过滤函数
      * @return 返回过滤结果
      */
@@ -153,14 +154,13 @@ public class Collections {
      * @param <V1>     源容器的值类型
      * @param <V2>     结果容器的值类型
      * @param map      源容器
-     * @param keyField 域名字
      * @return 返回映射结果
      * @throws RuntimeException 如果无法通过反射获得域，抛出异常
      */
     public static <K, V1, V2> Map<K, V2> project(Map<K, V1> map, @SuppressWarnings("SameParameterValue") String valueFieldName) throws RuntimeException {
         Map<K, V2> projected = new HashMap<>();
         for (Map.Entry<K, V1> entry : map.entrySet()) {
-            projected.put(entry.getKey(), (V2) new Call((Void) -> Objects.declaredFieldValue(entry.getValue(), valueFieldName), null, null).result());
+            projected.put(entry.getKey(), (V2) new Call((Void) -> ReflectUtils.declaredFieldValue(entry.getValue(), valueFieldName), null, null).result());
         }
 
         return projected;
@@ -172,7 +172,6 @@ public class Collections {
      * @param <K>      键类型
      * @param <V>      值类型
      * @param items    数组
-     * @param keyField 作为键的域的名字
      * @return 返回映射结果
      * @throws IllegalArgumentException 参数非法
      * @throws IllegalAccessException   在keyField不可访问时抛出
@@ -186,7 +185,7 @@ public class Collections {
 
         Map<K, V> map = new HashMap<>();
         for (V item : items) {
-            K key = (K) new Call((Void) -> Objects.declaredFieldValue(item, fieldName), null, null).result();
+            K key = (K) new Call((Void) -> ReflectUtils.declaredFieldValue(item, fieldName), null, null).result();
             if (key != null) {
                 map.put(key, item);
             }

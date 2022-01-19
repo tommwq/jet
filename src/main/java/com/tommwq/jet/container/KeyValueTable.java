@@ -1,7 +1,7 @@
 package com.tommwq.jet.container;
 
 import com.tommwq.jet.function.Function;
-import com.tommwq.jet.runtime.reflect.FieldGetter;
+import com.tommwq.jet.runtime.reflect.ReflectUtils;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -69,7 +69,7 @@ public class KeyValueTable {
             @Override
             public V2 apply(V1 v1) {
                 try {
-                    return FieldGetter.get(v1, keyField);
+                    return (V2) ReflectUtils.getField(v1, keyField);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -98,7 +98,7 @@ public class KeyValueTable {
         Map<K, V> result = new HashMap<>();
 
         for (V v : items) {
-            K k = FieldGetter.get(v, keyField);
+            K k = (K) ReflectUtils.getField(v, keyField);
             result.put(k, v);
         }
 

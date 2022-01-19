@@ -1,4 +1,4 @@
-package com.tommwq.jet.util;
+package com.tommwq.jet.runtime;
 
 /**
  * 返回运行平台操作系统相关信息

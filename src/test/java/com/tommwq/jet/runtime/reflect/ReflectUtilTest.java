@@ -19,7 +19,7 @@ public class ReflectUtilTest {
 
         @Test
         public void getAllSuperclass() {
-                List<Class> result = ReflectUtil.getAllSuperclass(D2.class);
+                List<Class> result = ReflectUtils.getAllSuperclass(D2.class);
                 List<Class> expect = Arrays.asList(D1.class, B.class, Object.class);
                 assertThat(result, is(expect));
         }

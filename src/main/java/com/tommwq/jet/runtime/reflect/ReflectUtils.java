@@ -1,14 +1,21 @@
-package com.tommwq.jet.util;
+package com.tommwq.jet.runtime.reflect;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.stream.Stream;
 
 /**
- * 对象辅助函数。
+ * utility functions for reflection
  */
-public class Objects {
+public class ReflectUtils {
+
     /**
      * 设置对象域。
      *
@@ -432,29 +439,6 @@ public class Objects {
     }
 
     /**
-     * 通过反射读取对象的域。
-     *
-     * @param <T>   对象类型
-     * @param <U>   域类型
-     * @param t     对象。
-     * @param field 域名字。
-     * @return 返回域的值。
-     * @throws IllegalArgumentException 读取域失败
-     * @throws IllegalAccessException   域不可访问
-     * @throws NoSuchFieldException     域不存在
-     * @throws SecurityException        域不可访问
-     */
-    @SuppressWarnings("unchecked")
-    public static <T, U> U get(T t, String field)
-            throws IllegalArgumentException,
-            IllegalAccessException,
-            NoSuchFieldException,
-            SecurityException {
-        //noinspection unchecked
-        return (U) t.getClass().getField(field).get(t);
-    }
-
-    /**
      * test if object contain a field
      */
     public static boolean containField(Object object, String fieldName) {
@@ -609,7 +593,7 @@ public class Objects {
             return new ArrayList<Class>();
         }
 
-        return Collections.concat(Arrays.asList(clazz.getInterfaces()),
+        return com.tommwq.jet.container.Collections.concat(Arrays.asList(clazz.getInterfaces()),
                 getAllInterfaces(clazz.getSuperclass()));
     }
 
@@ -822,6 +806,78 @@ public class Objects {
             }
         }
 
+        return result;
+    }
+
+
+    public static String getResourceNameFromPackage(Package aPackage) {
+        String resourceName = aPackage.getName();
+        return resourceName.replace(".", "/");
+    }
+
+    public static List<Class<?>> enumerateClasses() throws Exception {
+        List<Class<?>> result = new ArrayList<>();
+        for (Package aPackage : Package.getPackages()) {
+            result.addAll(enumerateClasses(aPackage));
+        }
+        return result;
+    }
+
+    public static List<Class<?>> enumerateClasses(Package aPackage) throws Exception {
+        String packageName = aPackage.getName();
+        String resourceName = getResourceNameFromPackage(aPackage);
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        URL resourceUrl = loader.getResource(resourceName);
+        if (resourceUrl == null) {
+            return new ArrayList<>();
+        }
+        String protocol = resourceUrl.getProtocol();
+        if ("jar".equals(protocol)) {
+            return enumerateClasses(resourceUrl, aPackage.getName());
+        } else {
+            URI uri = new URI(resourceUrl.toString());
+            File directory = new File(uri.getPath());
+            return enumerateClasses(packageName, directory);
+        }
+    }
+
+    // TODO
+    public static List<Class<?>> enumerateClasses(URL resourceUrl, String packageName) throws Exception {
+        String jarFileName;
+        JarFile jf;
+        Enumeration<JarEntry> jarEntries;
+        String entryName;
+        List<Class<?>> result = new ArrayList<>();
+
+        jarFileName = URLDecoder.decode(resourceUrl.getFile(), "UTF-8");
+        jarFileName = jarFileName.substring(5, jarFileName.indexOf("!"));
+        System.out.println(">" + jarFileName);
+        jf = new JarFile(jarFileName);
+        jarEntries = jf.entries();
+        while (jarEntries.hasMoreElements()) {
+            entryName = jarEntries.nextElement().getName();
+            if (entryName.startsWith(packageName) && entryName.length() > packageName.length() + 5) {
+                entryName = entryName.substring(packageName.length(), entryName.lastIndexOf('.'));
+                result.add(Class.forName(entryName));
+            }
+        }
+
+        return result;
+    }
+
+    public static List<Class<?>> enumerateClasses(String packageName, File directory) throws Exception {
+        List<Class<?>> result = new ArrayList<>();
+        File[] files = directory.listFiles();
+        if (files == null) {
+            return result;
+        }
+
+        String entryName;
+        for (File actual : files) {
+            entryName = actual.getName();
+            entryName = entryName.substring(0, entryName.lastIndexOf('.'));
+            result.add(Class.forName(packageName + "." + entryName));
+        }
         return result;
     }
 }

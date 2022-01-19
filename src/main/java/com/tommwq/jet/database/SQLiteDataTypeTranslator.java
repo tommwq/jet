@@ -3,7 +3,7 @@ package com.tommwq.jet.database;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SQLiteDataTypeTranslater implements DataTypeTranslater {
+public class SQLiteDataTypeTranslator implements SqlDataTypeTranslator {
 
     private static Map<String, Class> dataTypeTable = new HashMap<>();
     private static Map<Class, String> javaTypeTable = new HashMap<>();
@@ -35,6 +35,7 @@ public class SQLiteDataTypeTranslater implements DataTypeTranslater {
         javaTypeTable.put(short.class, "INTEGER");
     }
 
+    @Override
     public Class toJavaType(String dataType) {
         if (dataTypeTable.containsKey(dataType)) {
             return dataTypeTable.get(dataType);
@@ -43,7 +44,7 @@ public class SQLiteDataTypeTranslater implements DataTypeTranslater {
         return Object.class;
     }
 
-    public String toDataType(Class clazz) {
+    public String toSqlType(Class clazz) {
         Class type = clazz;
         if (clazz.isEnum()) {
             type = int.class;

@@ -5,7 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Databases {
+// TODO 从 DatabaseHelper 派生
+public class SQLServerHelper {
 
     /*
      * 只适用于SQL Server。

@@ -1,6 +1,6 @@
 package com.tommwq.jet.routine.filter;
 
-import com.tommwq.jet.util.Objects;
+import com.tommwq.jet.runtime.reflect.ReflectUtils;
 
 import java.util.function.Predicate;
 
@@ -21,7 +21,7 @@ public class ByFieldFilter<T> implements Predicate<T> {
     @Override
     public boolean test(T t) {
         try {
-            return targetValue.equals(Objects.getField(t, fieldName));
+            return targetValue.equals(ReflectUtils.getField(t, fieldName));
         } catch (Exception e) {
             return false;
         }
