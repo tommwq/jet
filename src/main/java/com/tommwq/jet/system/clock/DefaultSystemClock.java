@@ -1,6 +1,6 @@
 package com.tommwq.jet.system.clock;
 
-import javax.annotation.Nonnull;
+
 import java.time.LocalDateTime;
 
 /**
@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 public class DefaultSystemClock implements Clock {
 
     @Override
-    @Nonnull
     public LocalDateTime getTime() {
         return LocalDateTime.now();
     }

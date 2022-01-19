@@ -1,6 +1,6 @@
 package com.tommwq.jet.system.clock;
 
-import javax.annotation.Nonnull;
+
 import java.time.LocalDateTime;
 
 /**
@@ -12,6 +12,5 @@ public interface Clock {
      *
      * @return 当前时间
      */
-    @Nonnull
     LocalDateTime getTime();
 }

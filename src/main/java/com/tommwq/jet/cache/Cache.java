@@ -3,7 +3,6 @@ package com.tommwq.jet.cache;
 import com.tommwq.jet.system.clock.Clock;
 import com.tommwq.jet.system.clock.DefaultSystemClock;
 
-import javax.annotation.Nonnull;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -22,11 +21,11 @@ public class Cache<T> {
     private Optional<Duration> expire;
     private Clock clock;
 
-    public Cache(T value, @Nonnull Duration expire, @Nonnull Clock clock) {
+    public Cache(T value, Duration expire, Clock clock) {
         this(value, Optional.of(expire), clock);
     }
 
-    public Cache(T value, @Nonnull Optional<Duration> expire, @Nonnull Clock clock) {
+    public Cache(T value, Optional<Duration> expire, Clock clock) {
         this.value = value;
         this.expire = expire;
         this.clock = clock;
@@ -37,11 +36,11 @@ public class Cache<T> {
         this(null, Optional.empty(), new DefaultSystemClock());
     }
 
-    public Cache(@Nonnull Duration expire) {
+    public Cache(Duration expire) {
         this(null, Optional.of(expire), new DefaultSystemClock());
     }
 
-    public Cache(@Nonnull T value) {
+    public Cache(T value) {
         this(value, Optional.empty(), new DefaultSystemClock());
     }
 
@@ -63,7 +62,7 @@ public class Cache<T> {
      *
      * @param expire 超时时间
      */
-    public void setExpire(@Nonnull Duration expire) {
+    public void setExpire(Duration expire) {
         this.expire = Optional.of(expire);
     }
 

@@ -1,7 +1,7 @@
 package com.tommwq.jet.cache;
 
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.NotThreadSafe;
+import com.tommwq.jet.annotation.NotThreadSafe;
+
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -38,13 +38,13 @@ public class TemporalCache<T> {
         cached = null;
     }
 
-    @Nullable
+
     public T refresh() {
         clear();
         return get();
     }
 
-    @Nullable
+
     public T get() {
         if (cached != null) {
             return cached;

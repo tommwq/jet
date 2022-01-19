@@ -1,7 +1,8 @@
 package com.tommwq.jet.loadbalancer;
 
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.NotThreadSafe;
+
+import com.tommwq.jet.annotation.NotThreadSafe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class RoundRobinBalancer<T> implements LoadBalancer<T> {
     private int index = 0;
 
     @Override
-    @Nullable
+
     public T peek() {
         if (list.isEmpty()) {
             return null;
