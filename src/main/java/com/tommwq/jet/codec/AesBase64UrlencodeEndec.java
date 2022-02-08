@@ -7,13 +7,13 @@ import java.nio.charset.Charset;
 import java.util.Base64;
 
 /**
- * AES加解密类。
+ * AES + urlencode 加解密类。
  * <p>
  * 依次对明文进行加密、base64编码、urlencode。
  */
 public class AesBase64UrlencodeEndec implements Endec<String> {
-    private Charset charset;
-    private AesEndec endec;
+    private final Charset charset;
+    private final AesEndec endec;
 
     public AesBase64UrlencodeEndec(Charset charset, String randomKey) {
         this.charset = charset;

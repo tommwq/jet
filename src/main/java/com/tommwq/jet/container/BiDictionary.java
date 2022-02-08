@@ -1,6 +1,7 @@
 package com.tommwq.jet.container;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 /**
  * 双向字典
@@ -10,47 +11,53 @@ import java.util.HashMap;
  */
 public class BiDictionary<K, V> {
 
-    private HashMap<K, V> table1 = new HashMap<>();
-    private HashMap<V, K> table2 = new HashMap<>();
+    private HashMap<K, V> byKey = new HashMap<>();
+    private HashMap<V, K> byValue = new HashMap<>();
 
     public void put(K k, V v) {
-        table1.put(k, v);
-        table2.put(v, k);
+        byKey.put(k, v);
+        byValue.put(v, k);
     }
 
-    public V getByKey(K k) {
-        return table1.get(k);
+    public Optional<V> findKey(K k) {
+        return Optional.ofNullable(byKey.get(k));
     }
 
-    public K getByValue(V v) {
-        return table2.get(v);
+    public Optional<K> findValue(V v) {
+        return Optional.ofNullable(byValue.get(v));
     }
 
-    public void removeByKey(K k) {
-        if (!table1.containsKey(k)) {
+    public void removeKey(K k) {
+        if (!byKey.containsKey(k)) {
             return;
         }
 
-        V v = table1.get(k);
-        table1.remove(k);
-        table2.remove(v);
+        V v = byKey.get(k);
+        byKey.remove(k);
+        byValue.remove(v);
     }
 
-    public void removeByValue(V v) {
-        if (!table2.containsKey(v)) {
+    public void removeValue(V v) {
+        if (!byValue.containsKey(v)) {
             return;
         }
 
-        K k = table2.get(v);
-        table1.remove(k);
-        table2.remove(v);
+        K k = byValue.get(v);
+
+        byKey.remove(k);
+        byValue.remove(v);
+    }
+
+    public void clear() {
+        byKey.clear();
+        byValue.clear();
     }
 
     public boolean containsKey(K k) {
-        return table1.containsKey(k);
+        return byKey.containsKey(k);
     }
 
     public boolean containsValue(V v) {
-        return table2.containsKey(v);
+        return byValue.containsKey(v);
     }
 }

@@ -2,6 +2,7 @@ package com.tommwq.jet.runtime.reflect;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.net.URI;
 import java.net.URL;
@@ -547,26 +548,36 @@ public class ReflectUtils {
         field.setAccessible(true);
         try {
             String fieldType = field.getType().getName();
-            if (fieldType.equals("int")) {
-                field.setInt(object, Integer.valueOf(value));
-            } else if (fieldType.equals("short")) {
-                field.setShort(object, Short.valueOf(value));
-            } else if (fieldType.equals("long")) {
-                field.setLong(object, Long.valueOf(value));
-            } else if (fieldType.equals("float")) {
-                field.setFloat(object, Float.valueOf(value));
-            } else if (fieldType.equals("double")) {
-                field.setDouble(object, Double.valueOf(value));
-            } else if (fieldType.equals("char")) {
-                field.setChar(object, value.charAt(0));
-            } else if (fieldType.equals("byte")) {
-                field.setByte(object, Byte.valueOf(value));
-            } else if (fieldType.equals("boolean")) {
-                field.setBoolean(object, Boolean.valueOf(value));
-            } else if (fieldType.equals("java.lang.String")) {
-                field.set(object, value);
-            } else {
-                throw new RuntimeException("non-castable type: " + fieldType);
+            switch (fieldType) {
+                case "int":
+                    field.setInt(object, Integer.valueOf(value));
+                    break;
+                case "short":
+                    field.setShort(object, Short.valueOf(value));
+                    break;
+                case "long":
+                    field.setLong(object, Long.valueOf(value));
+                    break;
+                case "float":
+                    field.setFloat(object, Float.valueOf(value));
+                    break;
+                case "double":
+                    field.setDouble(object, Double.valueOf(value));
+                    break;
+                case "char":
+                    field.setChar(object, value.charAt(0));
+                    break;
+                case "byte":
+                    field.setByte(object, Byte.valueOf(value));
+                    break;
+                case "boolean":
+                    field.setBoolean(object, Boolean.valueOf(value));
+                    break;
+                case "java.lang.String":
+                    field.set(object, value);
+                    break;
+                default:
+                    throw new RuntimeException("non-castable type: " + fieldType);
             }
         } catch (IllegalAccessException e) {
             throw new RuntimeException("unknown error: cannot access an accessible field");
@@ -880,4 +891,18 @@ public class ReflectUtils {
         }
         return result;
     }
+
+    /**
+     * 复制平凡对象。
+     *
+     * @param clazz     对象类型
+     * @param prototype 原型
+     * @param <T>       对象类型
+     * @return 对象副本
+     */
+    public static <T> T copyPlainObject(Class<T> clazz, Object prototype)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        return merge(clazz.getConstructor().newInstance(), prototype);
+    }
+
 }

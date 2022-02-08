@@ -88,7 +88,7 @@ public class TimeRecorder {
         }
     }
 
-    private class TimeRecord {
+    private static class TimeRecord {
         public long time;
         public String tag;
     }

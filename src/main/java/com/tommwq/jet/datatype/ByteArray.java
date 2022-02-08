@@ -1,8 +1,3 @@
-/**
- * 处理byte[]的常用函数。
- * create: 2016-09-21
- * modify: 2016-10-20
- */
 package com.tommwq.jet.datatype;
 
 import java.util.ArrayList;

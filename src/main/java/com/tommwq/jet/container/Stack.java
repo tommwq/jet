@@ -3,12 +3,11 @@ package com.tommwq.jet.container;
 /**
  * 栈
  */
-public interface Stack<T> extends Iterable<T> {
+public interface Stack<T> {
     /**
      * 压栈
      *
-     * @param <T>  元素类型
-     * @param 压栈元素
+     * @param element 压栈元素
      */
     void push(T element);
 
@@ -21,10 +20,9 @@ public interface Stack<T> extends Iterable<T> {
     /**
      * 弹栈
      *
-     * @return 栈顶元素
      * @throws UnsupportedOperationException 当栈为空时抛出此异常
      */
-    T pop() throws UnsupportedOperationException;
+    void pop() throws UnsupportedOperationException;
 
     /**
      * @return 是否为空

@@ -35,7 +35,7 @@ public class Background<T> {
     /**
      * 获取底层的线程对象。
      *
-     * @return
+     * @return 线程对象
      */
     public Thread thread() {
         return thread;

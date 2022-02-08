@@ -1,12 +1,3 @@
-/**
- * File: Ticker.java
- * Description:
- *
- * @author Wang Qian
- * Create date 2016-09-15
- * Modify date 2016-10-10
- */
-
 package com.tommwq.jet.system.clock;
 
 import java.time.Duration;

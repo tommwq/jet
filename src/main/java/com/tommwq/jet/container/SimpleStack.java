@@ -1,9 +1,6 @@
 package com.tommwq.jet.container;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 
 public class SimpleStack<T> implements Stack<T> {
 
@@ -20,11 +17,11 @@ public class SimpleStack<T> implements Stack<T> {
         return underlying.get(0);
     }
 
-    public T pop() {
+    public void pop() {
         if (underlying.isEmpty()) {
             throw new UnsupportedOperationException();
         }
-        return underlying.remove(0);
+        underlying.remove(0);
     }
 
     public boolean isEmpty() {
@@ -37,18 +34,6 @@ public class SimpleStack<T> implements Stack<T> {
         }
 
         underlying.add(0, element);
-    }
-
-    public void forEach(Consumer<? super T> action) {
-        underlying.forEach(action);
-    }
-
-    public Iterator<T> iterator() {
-        return underlying.iterator();
-    }
-
-    public Spliterator<T> spliterator() {
-        return underlying.spliterator();
     }
 
     public int size() {

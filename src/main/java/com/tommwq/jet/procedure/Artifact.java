@@ -1,11 +1,3 @@
-/**
- * File: Artifact.java
- * Description:
- * Author: Wang Qian
- * Create: 2017-03-10
- * Modify: 2017-03-10
- */
-
 package com.tommwq.jet.procedure;
 
 /**
@@ -13,20 +5,20 @@ package com.tommwq.jet.procedure;
  */
 public interface Artifact {
 
-    public boolean isCancelled();
+    boolean isCancelled();
 
-    public void cancel();
+    void cancel();
 
-    public boolean isReady();
+    boolean isReady();
 
-    public void setReady();
+    void setReady();
 
-    public boolean isTimeout();
+    boolean isTimeout();
 
-    public void setTimeout();
+    void setTimeout();
 
-    public void addPart(Artifact artifact);
+    void addPart(Artifact artifact);
 
-    public boolean isAllPartsReady();
+    boolean isAllPartsReady();
 }
 

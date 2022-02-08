@@ -43,7 +43,7 @@ public class ThreadUtils {
         }
     }
 
-    public static enum SleepResult {
-        Timeup, Interrupted;
+    public enum SleepResult {
+        Timeup, Interrupted
     }
 }

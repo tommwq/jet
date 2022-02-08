@@ -62,7 +62,6 @@ public class MapUtils {
      * @param <V1>     源容器的值类型
      * @param <V2>     结果容器的值类型
      * @param map      源容器
-     * @param keyField 域名字
      * @return 返回映射结果
      * @throws RuntimeException 如果无法通过反射获得域，抛出异常
      */
@@ -81,7 +80,6 @@ public class MapUtils {
      * @param <K>      键类型
      * @param <V>      值类型
      * @param items    数组
-     * @param keyField 作为键的域的名字
      * @return 返回映射结果
      * @throws IllegalArgumentException 参数非法
      * @throws IllegalAccessException   在keyField不可访问时抛出

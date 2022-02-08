@@ -2,16 +2,17 @@ package com.tommwq.jet.codec;
 
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**
- * AES加解密类。
+ * AES + Base64 加解密类。
  * <p>
  * 依次对明文进行加密和base64编码。
  */
 public class AesBase64Endec implements Endec<String> {
-    private Charset charset;
-    private AesEndec endec;
+    private final Charset charset;
+    private final AesEndec endec;
 
     public AesBase64Endec(Charset charset, String randomKey) {
         this.charset = charset;
@@ -42,7 +43,7 @@ public class AesBase64Endec implements Endec<String> {
      */
     @Override
     public String decrypt(String base64Encrypted) throws Exception {
-        byte[] decoded = Base64.getDecoder().decode(base64Encrypted.getBytes("UTF-8"));
+        byte[] decoded = Base64.getDecoder().decode(base64Encrypted.getBytes(StandardCharsets.UTF_8));
         byte[] decrypted = endec.decrypt(decoded);
         return new String(decrypted, charset);
     }

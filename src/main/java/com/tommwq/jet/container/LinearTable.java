@@ -92,7 +92,7 @@ public class LinearTable {
             if (!first) {
                 b.append(delim);
             }
-            b.append(String.valueOf(element));
+            b.append(element);
             first = false;
         }
 

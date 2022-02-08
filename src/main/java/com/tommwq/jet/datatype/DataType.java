@@ -1,7 +1,3 @@
-/**
- * 类型相关的效用函数。
- * modify: 2016-10-11
- */
 package com.tommwq.jet.datatype;
 
 import com.tommwq.jet.function.Call;

@@ -1,5 +1,11 @@
 package com.tommwq.jet.container;
 
+/**
+ * 键值对
+ *
+ * @param <K> 键类型
+ * @param <V> 值类型
+ */
 public class Pair<K, V> {
     private K key;
     private V value;

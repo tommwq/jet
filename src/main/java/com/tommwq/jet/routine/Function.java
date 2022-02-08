@@ -1,10 +1,3 @@
-/**
- * Function.java
- * 函数对象。
- * <p>
- * 2017年1月24日。
- */
-
 package com.tommwq.jet.routine;
 
 /**

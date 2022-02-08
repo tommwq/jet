@@ -85,7 +85,6 @@ public class Try<In, Out> {
      * @param errorClass 当函数执行发送异常时，Try对象抛出的异常。
      *                   errorClass必须是RuntimeException或其派生类，并提供带有Throwable参数的构造函数。
      * @return Try自身
-     * @see exception()
      */
     public Try rethrow(Class errorClass) {
         rethrowException = errorClass;

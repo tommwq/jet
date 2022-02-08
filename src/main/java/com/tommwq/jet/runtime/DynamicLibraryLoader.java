@@ -1,10 +1,3 @@
-/**
- * File: DynamicLibraryLoader.java
- * Description: 动态库加载器。
- * Author: 汪千
- * Create: 2016-08-31
- * Modify: 2016-09-06
- */
 package com.tommwq.jet.runtime;
 
 

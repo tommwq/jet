@@ -1,10 +1,3 @@
-/**
- * FutureUtils.java
- * Future效用函数类。
- * <p>
- * 2017年1月25日
- */
-
 package com.tommwq.jet.runtime.concurrent;
 
 import com.tommwq.jet.function.FallibleFunction;

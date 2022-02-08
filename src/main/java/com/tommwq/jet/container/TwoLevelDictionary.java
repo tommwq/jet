@@ -3,6 +3,8 @@ package com.tommwq.jet.container;
 import java.util.Map;
 
 /**
+ * 二层字典
+ * <p>
  * 格式为(k1,k2,v)的字典
  */
 public interface TwoLevelDictionary<T1, T2, T3> {
@@ -23,7 +25,7 @@ public interface TwoLevelDictionary<T1, T2, T3> {
 
     void clear();
 
-    public static class Entry<T1, T2, T3> {
+    class Entry<T1, T2, T3> {
         private T1 k1;
         private T2 k2;
         private T3 v;
