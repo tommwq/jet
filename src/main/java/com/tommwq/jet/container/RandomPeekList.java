@@ -7,9 +7,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 // TODO 做成List子类。
 public class RandomPeekList<T> {
-    private List<T> array = new ArrayList();
-    private ReentrantReadWriteLock rwlock = new ReentrantReadWriteLock();
-    private Random random = new Random(System.currentTimeMillis());
+    private final List<T> array = new ArrayList();
+    private final ReentrantReadWriteLock rwlock = new ReentrantReadWriteLock();
+    private final Random random = new Random(System.currentTimeMillis());
 
     public void add(T t) {
         rwlock.writeLock().lock();

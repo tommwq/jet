@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
 public class AesEndec implements Endec<byte[]> {
     private static final String KEY_ALGORITHM = "AES";
     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";
-    private byte[] randomKey;
+    private final byte[] randomKey;
 
     public AesEndec(byte[] randomKey) {
         this.randomKey = randomKey;

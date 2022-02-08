@@ -6,9 +6,9 @@ public class RingBuffer<T> {
 
     public static final int INVALID_POSITION = -1;
 
-    private int capacity;
+    private final int capacity;
     private volatile int position = INVALID_POSITION;
-    private T[] array;
+    private final T[] array;
 
     public RingBuffer(int capacity) {
         this.capacity = capacity;

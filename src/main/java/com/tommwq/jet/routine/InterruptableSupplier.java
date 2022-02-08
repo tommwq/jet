@@ -5,7 +5,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class InterruptableSupplier<T> implements Supplier<T>, Interruptable {
-    private Interruptor interruptor = new Interruptor();
+    private final Interruptor interruptor = new Interruptor();
 
     public static <T> InterruptableSupplier make(FallibleSupplier<T> supplier, Function<Exception, T> exceptionHandler) {
         return new InterruptableSupplier() {

@@ -8,7 +8,7 @@ import java.util.Optional;
  * Receipt是请求凭证。Receipt用于保存和请求或应答相关联的数据。
  */
 public class Context {
-    private Map<String, Object> values = new HashMap();
+    private final Map<String, Object> values = new HashMap();
     private Receipt receipt = null;
 
     public Context(Receipt r) {

@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
  * 定时器。
  */
 public class Ticker {
-    private Duration tickDuration;
-    private LocalDateTime lastTickTime;
-    private Clock clock;
+    private final Duration tickDuration;
+    private final LocalDateTime lastTickTime;
+    private final Clock clock;
 
     /**
      * 建立定时器。

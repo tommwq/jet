@@ -10,8 +10,8 @@ import java.util.function.Predicate;
  * @param <T>
  */
 public class ByFieldFilter<T> implements Predicate<T> {
-    private String fieldName;
-    private String targetValue;
+    private final String fieldName;
+    private final String targetValue;
 
     public ByFieldFilter(String fieldName, Object targetValue) {
         this.fieldName = fieldName;

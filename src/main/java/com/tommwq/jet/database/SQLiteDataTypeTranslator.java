@@ -5,8 +5,8 @@ import java.util.Map;
 
 public class SQLiteDataTypeTranslator implements SqlDataTypeTranslator {
 
-    private static Map<String, Class> dataTypeTable = new HashMap<>();
-    private static Map<Class, String> javaTypeTable = new HashMap<>();
+    private static final Map<String, Class> dataTypeTable = new HashMap<>();
+    private static final Map<Class, String> javaTypeTable = new HashMap<>();
 
     static {
         dataTypeTable.put("BLOB", Object.class);

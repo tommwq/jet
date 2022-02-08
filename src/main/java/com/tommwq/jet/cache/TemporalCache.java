@@ -13,7 +13,7 @@ import java.util.function.Supplier;
  */
 @NotThreadSafe
 public class TemporalCache<T> {
-    private Supplier<T> supplier;
+    private final Supplier<T> supplier;
     private Function<Exception, T> exceptionHandler = null;
     private T cached = null;
 

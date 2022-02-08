@@ -6,7 +6,7 @@ import com.tommwq.jet.system.io.storage.Storage;
  * 业务事件记录器
  */
 public class Recorder {
-    private Storage storage;
+    private final Storage storage;
 
     public Recorder(Storage storage) {
         this.storage = storage;

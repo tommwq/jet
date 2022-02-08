@@ -22,7 +22,7 @@ public class InjectUtil {
     /**
      * scan java class names under directory
      */
-    public static List<String> scanDirectory(File root, String packageName) throws FileNotFoundException, IOException {
+    public static List<String> scanDirectory(File root, String packageName) throws IOException {
         List<String> result = new ArrayList<>();
 
         List<File> descendants = FileUtils.walk(root.toPath());

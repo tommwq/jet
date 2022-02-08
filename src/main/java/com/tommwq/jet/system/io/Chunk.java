@@ -7,7 +7,7 @@ import java.util.Arrays;
  * 内存块
  */
 public class Chunk {
-    private int capacity;
+    private final int capacity;
     private int dataSize;
     private byte[] data = null;
 

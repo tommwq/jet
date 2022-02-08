@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CacheGroup {
     private Optional<Duration> defaultExpire = Optional.empty();
-    private Map<String, Cache<Object>> group = new ConcurrentHashMap<>(16);
+    private final Map<String, Cache<Object>> group = new ConcurrentHashMap<>(16);
 
     /**
      * 设置缓存

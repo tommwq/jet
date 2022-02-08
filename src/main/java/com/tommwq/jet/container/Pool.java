@@ -5,8 +5,8 @@ import java.util.Map;
 
 public class Pool<T> {
 
-    private Map<Integer, T> container;
-    private HashFunction<T> hash;
+    private final Map<Integer, T> container;
+    private final HashFunction<T> hash;
     public Pool() {
         hash = Pool::defaultHash;
         container = new HashMap<>();

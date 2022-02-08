@@ -278,7 +278,7 @@ public class FutureUtils {
      */
     public static <T> T sequence(long timeout, TimeUnit timeunit, T init,
                                  com.tommwq.jet.routine.Function<T, T>... actions)
-            throws Exception, TimeoutException {
+            throws Exception {
         CompletableFuture<T> future = CompletableFuture.completedFuture(init);
         int count = actions.length;
         for (int i = 0; i < count; i++) {

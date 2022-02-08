@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class SimpleStack<T> implements Stack<T> {
 
-    private ArrayList<T> underlying = new ArrayList();
+    private final ArrayList<T> underlying = new ArrayList();
 
     public void push(T element) {
         underlying.add(0, element);
@@ -29,7 +29,7 @@ public class SimpleStack<T> implements Stack<T> {
     }
 
     public void bringToTop(T element) {
-        if (!underlying.remove((Object) element)) {
+        if (!underlying.remove(element)) {
             throw new UnsupportedOperationException();
         }
 

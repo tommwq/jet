@@ -9,7 +9,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class Client {
 
-    private Agency agency;
+    private final Agency agency;
 
     /**
      * Client构造函数。

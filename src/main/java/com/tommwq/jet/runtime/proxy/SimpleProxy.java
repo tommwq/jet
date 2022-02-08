@@ -6,7 +6,7 @@ import java.lang.reflect.Proxy;
 
 public class SimpleProxy implements InvocationHandler {
 
-    private Object target;
+    private final Object target;
     private MethodInvokeInterceptor before = null;
     private MethodInvokeInterceptor after = null;
 

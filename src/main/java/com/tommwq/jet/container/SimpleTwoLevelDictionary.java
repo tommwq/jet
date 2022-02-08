@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class SimpleTwoLevelDictionary<T1, T2, T3> implements TwoLevelDictionary<T1, T2, T3> {
 
-    private HashMap<T1, HashMap<T2, T3>> triples = new HashMap();
+    private final HashMap<T1, HashMap<T2, T3>> triples = new HashMap();
 
     public void put(T1 k1, T2 k2, T3 v) {
         if (!triples.containsKey(k1)) {

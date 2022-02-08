@@ -9,7 +9,7 @@ import java.util.function.Function;
 public class Try<In, Out> {
     private Function<In, Out> function = null;
     private Function<Throwable, Void> exceptionHandler = null;
-    private ArrayList<Class> ignoreList = new ArrayList<>();
+    private final ArrayList<Class> ignoreList = new ArrayList<>();
     private Class rethrowException = null;
 
     /**

@@ -7,9 +7,9 @@ import java.util.concurrent.CompletableFuture;
  */
 public class Receipt {
 
-    private long id;
-    private Object request;
-    private CompletableFuture response = new CompletableFuture();
+    private final long id;
+    private final Object request;
+    private final CompletableFuture response = new CompletableFuture();
 
     //private volatile boolean isDone = false;
 

@@ -12,8 +12,8 @@ import java.util.List;
 public class TimeRecorder {
 
     private long start = 0;
-    private List<TimeRecord> records = new ArrayList();
-    private Clock clock;
+    private final List<TimeRecord> records = new ArrayList();
+    private final Clock clock;
     public TimeRecorder() {
         this.clock = new DefaultSystemClock();
     }

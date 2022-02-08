@@ -8,8 +8,8 @@ import java.nio.charset.Charset;
 
 public class DelimitedFileReader {
 
-    private String rowDelimiter;
-    private String columnDelimiter;
+    private final String rowDelimiter;
+    private final String columnDelimiter;
 
     public DelimitedFileReader(String aRowDelimiter, String aColumnDelimiter) {
         if (aRowDelimiter == null || aRowDelimiter.length() == 0) {
@@ -24,11 +24,11 @@ public class DelimitedFileReader {
         columnDelimiter = aColumnDelimiter;
     }
 
-    public String[][] read(File file) throws FileNotFoundException, IOException {
+    public String[][] read(File file) throws IOException {
         return read(file, Charset.defaultCharset());
     }
 
-    public String[][] read(File file, Charset charset) throws FileNotFoundException, IOException {
+    public String[][] read(File file, Charset charset) throws IOException {
         String content;
 
         try (FileInputStream inputStream = new FileInputStream(file)) {

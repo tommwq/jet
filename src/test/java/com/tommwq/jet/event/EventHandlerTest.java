@@ -21,7 +21,7 @@ class TestEvent extends Event<TestEvent> {
 }
 
 class SimpleEventHandler extends EventHandler {
-    private BitSet bitSet = new BitSet(2);
+    private final BitSet bitSet = new BitSet(2);
 
     public SimpleEventHandler() {
         bind();

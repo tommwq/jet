@@ -9,10 +9,10 @@ import com.tommwq.jet.function.Function;
  */
 public class Background<T> {
 
-    private Function<T, Void> function;
-    private T parameter;
+    private final Function<T, Void> function;
+    private final T parameter;
 
-    private Thread thread = new Thread() {
+    private final Thread thread = new Thread() {
         @Override
         public void run() {
             if (function == null) {

@@ -19,7 +19,7 @@ public class Cache<T> {
     private T value;
     private LocalDateTime touchTime;
     private Optional<Duration> expire;
-    private Clock clock;
+    private final Clock clock;
 
     public Cache(T value, Duration expire, Clock clock) {
         this(value, Optional.of(expire), clock);

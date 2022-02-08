@@ -26,7 +26,7 @@ public class DynamicLinking {
     private static final Set<String> loadedLibraries = new ConcurrentSkipListSet<>();
     private File temporaryDirectory = null;
     private File runningDirectory = null;
-    private boolean cacheNativeLibraryToRunningDirectory;
+    private final boolean cacheNativeLibraryToRunningDirectory;
 
     public DynamicLinking() throws IOException {
         this(true);

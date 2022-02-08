@@ -10,8 +10,8 @@ import java.util.List;
  */
 public class ChunkListBuffer {
     private static final int DEFAULT_CHUNK_CAPACITY = 4096;
-    private List<Chunk> chunks = new ArrayList<>(16);
-    private int chunkCapacity;
+    private final List<Chunk> chunks = new ArrayList<>(16);
+    private final int chunkCapacity;
     private int dataSize;
 
     /**

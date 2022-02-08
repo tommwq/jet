@@ -26,9 +26,9 @@ public interface TwoLevelDictionary<T1, T2, T3> {
     void clear();
 
     class Entry<T1, T2, T3> {
-        private T1 k1;
-        private T2 k2;
-        private T3 v;
+        private final T1 k1;
+        private final T2 k2;
+        private final T3 v;
 
         public Entry(T1 k1, T2 k2, T3 v) {
             this.k1 = k1;

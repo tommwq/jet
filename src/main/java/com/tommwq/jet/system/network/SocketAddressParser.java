@@ -4,7 +4,7 @@ package com.tommwq.jet.system.network;
  * parse socket address string, e.g. "127.0.0.1:8080"
  */
 public class SocketAddressParser {
-    private String socketAddress;
+    private final String socketAddress;
     private int port;
     private String address;
 

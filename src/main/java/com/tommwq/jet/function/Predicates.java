@@ -35,7 +35,7 @@ public class Predicates {
     }
 
     public static class StringMatcher implements Predicate<String> {
-        private String target;
+        private final String target;
 
         public StringMatcher(String target) {
             this.target = target;
@@ -48,7 +48,7 @@ public class Predicates {
     }
 
     public static class IgnoreCaseStringMatcher implements Predicate<String> {
-        private String target;
+        private final String target;
 
         public IgnoreCaseStringMatcher(String target) {
             this.target = target;
@@ -61,7 +61,7 @@ public class Predicates {
     }
 
     public static class And<T> implements Predicate<T> {
-        private List<Predicate<T>> predicates;
+        private final List<Predicate<T>> predicates;
 
         public And(Predicate<T>[] predicateArray) {
             this.predicates = Arrays.asList(predicateArray);
@@ -87,7 +87,7 @@ public class Predicates {
     }
 
     public static class Or<T> implements Predicate<T> {
-        private List<Predicate<T>> predicates;
+        private final List<Predicate<T>> predicates;
 
         public Or(Predicate<T>[] predicateArray) {
             predicates = Arrays.asList(predicateArray);

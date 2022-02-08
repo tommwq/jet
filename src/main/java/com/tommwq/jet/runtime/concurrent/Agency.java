@@ -14,7 +14,7 @@ public abstract class Agency {
     TimeoutCheckThread timeoutCheckThread = new TimeoutCheckThread();
     HeartbeatThread heartbeatThread = new HeartbeatThread();
     private boolean running;
-    private Map<Long, Context> contextes = new ConcurrentHashMap();
+    private final Map<Long, Context> contextes = new ConcurrentHashMap();
     private long receiptId = 0;
 
     public Agency() {
@@ -50,7 +50,7 @@ public abstract class Agency {
 
         dispatchThread.interrupt();
         timeoutCheckThread.interrupt();
-        heartbeatThread.interrupted();
+        Thread.interrupted();
     }
 
     public Optional<Context> getContext(long rid) {

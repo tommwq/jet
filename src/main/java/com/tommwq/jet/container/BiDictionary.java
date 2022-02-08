@@ -11,8 +11,8 @@ import java.util.Optional;
  */
 public class BiDictionary<K, V> {
 
-    private HashMap<K, V> byKey = new HashMap<>();
-    private HashMap<V, K> byValue = new HashMap<>();
+    private final HashMap<K, V> byKey = new HashMap<>();
+    private final HashMap<V, K> byValue = new HashMap<>();
 
     public void put(K k, V v) {
         byKey.put(k, v);

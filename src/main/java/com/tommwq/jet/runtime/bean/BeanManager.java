@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class BeanManager {
 
-    private Map<Class, Object> beans;
+    private final Map<Class, Object> beans;
 
     public BeanManager() {
         beans = new HashMap<>();
