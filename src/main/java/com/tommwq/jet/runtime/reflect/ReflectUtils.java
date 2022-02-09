@@ -604,7 +604,7 @@ public class ReflectUtils {
             return new ArrayList<Class>();
         }
 
-        return com.tommwq.jet.container.Collections.concat(Arrays.asList(clazz.getInterfaces()),
+        return com.tommwq.jet.container.Container.concat(Arrays.asList(clazz.getInterfaces()),
                 getAllInterfaces(clazz.getSuperclass()));
     }
 

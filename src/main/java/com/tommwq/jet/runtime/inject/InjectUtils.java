@@ -7,7 +7,6 @@ import com.tommwq.jet.function.Call;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -17,7 +16,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.stream.Collectors;
 
-public class InjectUtil {
+public class InjectUtils {
 
     /**
      * scan java class names under directory
@@ -93,13 +92,13 @@ public class InjectUtil {
             File file = new File(path.getFile());
 
             if (file.isFile()) {
-                classNameList.addAll((List<String>) new Call((Void) -> InjectUtil.scanJar(file, packageName),
+                classNameList.addAll((List<String>) new Call((Void) -> InjectUtils.scanJar(file, packageName),
                         null,
                         Container.list()).result());
             }
 
             if (file.isDirectory()) {
-                classNameList.addAll((List<String>) new Call((Void) -> InjectUtil.scanDirectory(file, packageName),
+                classNameList.addAll((List<String>) new Call((Void) -> InjectUtils.scanDirectory(file, packageName),
                         null,
                         Container.list()).result());
             }

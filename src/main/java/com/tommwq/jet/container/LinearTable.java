@@ -15,7 +15,6 @@ import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
 public class LinearTable {
-    @SuppressWarnings("unchecked")
     public static <T> List<T> select(Collection<T> items, String field, Object value) {
         List<T> selected = new ArrayList<>();
 
@@ -30,13 +29,11 @@ public class LinearTable {
         return selected;
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> List<T> select(T[] items, String field, Object value) {
         List<T> selected = new ArrayList<>();
 
         for (T t : items) {
             try {
-                //noinspection unchecked
                 if (ReflectUtils.getField(t, field).equals(value)) {
                     selected.add(t);
                 }
@@ -80,8 +77,7 @@ public class LinearTable {
     }
 
     public static <T> List<T> fromCollection(Collection<T> items) {
-        List<T> result = new ArrayList<>();
-        result.addAll(items);
+        List<T> result = new ArrayList<>(items);
         return result;
     }
 

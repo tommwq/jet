@@ -1,6 +1,9 @@
 package com.tommwq.jet.container;
 
-public class HashUtil {
+/**
+ * 散列函数
+ */
+public class HashUtils {
 
     public static int hash(String... array) {
         int hashCode = 0;

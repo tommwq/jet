@@ -11,8 +11,9 @@ public final class ColumnDescriptor {
 
     public ColumnDescriptor(String name, String type) {
         if (name == null || type == null) {
-            throw new IllegalArgumentException("illegal column descriptor");
+            throw new IllegalArgumentException("非法列描述符");
         }
+
         this.name = name;
         this.type = type;
     }
@@ -32,7 +33,7 @@ public final class ColumnDescriptor {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj != null && obj instanceof ColumnDescriptor) {
+        if (obj instanceof ColumnDescriptor) {
             ColumnDescriptor other = (ColumnDescriptor) obj;
             return type.equals(other.type) && name.equals(other.name);
         }

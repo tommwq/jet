@@ -1,4 +1,4 @@
-package com.tommwq.jet.tool;
+package com.tommwq.jet.system.clock;
 
 import com.tommwq.jet.system.clock.Clock;
 import com.tommwq.jet.system.clock.DefaultSystemClock;
@@ -9,16 +9,17 @@ import java.util.List;
 /**
  * 计时器
  */
-public class TimeRecorder {
+public class Timer {
 
     private long start = 0;
     private final List<TimeRecord> records = new ArrayList();
     private final Clock clock;
-    public TimeRecorder() {
+
+    public Timer() {
         this.clock = new DefaultSystemClock();
     }
 
-    public TimeRecorder(Clock clock) {
+    public Timer(Clock clock) {
         this.clock = clock;
     }
 

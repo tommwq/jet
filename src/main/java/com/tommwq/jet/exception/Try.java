@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.function.Function;
 
 /**
- * 为简化try-cache结构引入的辅助类。
+ * 为简化 try-cache 结构引入的辅助类。
  */
-public class Try<In, Out> {
-    private Function<In, Out> function = null;
+public class Try<SingleParameter, ReturnValue> {
+    private Function<SingleParameter, ReturnValue> function = null;
     private Function<Throwable, Void> exceptionHandler = null;
     private final ArrayList<Class> ignoreList = new ArrayList<>();
     private Class rethrowException = null;
@@ -17,7 +17,7 @@ public class Try<In, Out> {
      *
      * @param function 要执行的函数。
      */
-    public Try(Function<In, Out> function) {
+    public Try(Function<SingleParameter, ReturnValue> function) {
         this.function = function;
     }
 
@@ -28,12 +28,12 @@ public class Try<In, Out> {
      * @param defaultResult 异常时的默认返回值。
      * @return 如果出现异常，返回defaultResult。否则返回函数结果。
      */
-    public Out go(In in, Out defaultResult) {
+    public ReturnValue run(SingleParameter in, ReturnValue defaultResult) {
         if (function == null) {
             return defaultResult;
         }
 
-        Out result = defaultResult;
+        ReturnValue result = defaultResult;
 
         try {
             result = function.apply(in);

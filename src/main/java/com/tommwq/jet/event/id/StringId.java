@@ -8,7 +8,7 @@ public class StringId implements Id {
     }
 
     public boolean isSame(Id aId) {
-        return aId != null && aId instanceof StringId && id.equals(((StringId) aId).id);
+        return aId instanceof StringId && id.equals(((StringId) aId).id);
     }
 
     public boolean isValid() {

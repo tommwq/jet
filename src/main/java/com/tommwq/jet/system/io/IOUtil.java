@@ -26,7 +26,7 @@ public class IOUtil {
 
             readLength += n;
             remainLength -= n;
-            dataLength = blockSize > remainLength ? remainLength : blockSize;
+            dataLength = Math.min(blockSize, remainLength);
         }
     }
 }
