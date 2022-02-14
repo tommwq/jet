@@ -1,6 +1,6 @@
 package com.tommwq.jet.system.thread;
 
-import com.tommwq.jet.function.Function;
+import java.util.function.Function;
 
 /**
  * 启动新线程执行函数。
@@ -19,7 +19,10 @@ public class Background<T> {
                 return;
             }
 
-            function.apply(parameter);
+            try {
+                function.apply(parameter);
+            } catch (Exception exception) {
+            }
         }
     };
 
@@ -44,7 +47,7 @@ public class Background<T> {
     /**
      * 启动线程。
      */
-    public void go() {
+    public void start() {
         thread.start();
     }
 }

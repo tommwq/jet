@@ -1,6 +1,6 @@
 package com.tommwq.jet.container;
 
-import com.tommwq.jet.function.Call;
+import com.tommwq.jet.routine.Call;
 import com.tommwq.jet.routine.FallibleFunction;
 import com.tommwq.jet.runtime.reflect.ClassUtils;
 import com.tommwq.jet.runtime.reflect.ReflectUtils;
@@ -152,7 +152,7 @@ public class Container {
     public static <K, V1, V2> Map<K, V2> transform(Map<K, V1> map, FallibleFunction<V1, V2> transformer, V2 defaultValue) {
         Map<K, V2> transformed = new HashMap<>();
         for (Map.Entry<K, V1> entry : map.entrySet()) {
-            transformed.put(entry.getKey(), (V2) new com.tommwq.jet.routine.Call((Void) -> transformer.apply(entry.getValue()), null, defaultValue).result());
+            transformed.put(entry.getKey(), (V2) new com.tommwq.jet.routine.Call((Void) -> transformer.call(entry.getValue()), null, defaultValue).result());
         }
 
         return transformed;
@@ -249,27 +249,5 @@ public class Container {
 
     public static <T> List<T> list() {
         return new ArrayList<>();
-    }
-
-
-    /**
-     * 将容器(K,V1)映射为(K,transformer(V1))
-     *
-     * @param <K>          键类型
-     * @param <V1>         源容器值类型
-     * @param <V2>         结果容器值类型
-     * @param map          源容器
-     * @param transformer  变换函数
-     * @param defaultValue 变换函数抛出异常时，采用默认值作为转换结果。
-     * @return 返回映射结果
-     */
-    @SuppressWarnings("WeakerAccess")
-    public static <K, V1, V2> Map<K, V2> transform(Map<K, V1> map, com.tommwq.jet.function.FallibleFunction<V1, V2> transformer, V2 defaultValue) {
-        Map<K, V2> transformed = new HashMap<>();
-        for (Map.Entry<K, V1> entry : map.entrySet()) {
-            transformed.put(entry.getKey(), (V2) new Call((Void) -> transformer.call(entry.getValue()), null, defaultValue).result());
-        }
-
-        return transformed;
     }
 }

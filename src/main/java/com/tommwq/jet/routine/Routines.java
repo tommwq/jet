@@ -15,7 +15,7 @@ public class Routines {
     public static <T, R> Function<T, R> wrapException(FallibleFunction<T, R> fallible) {
         return (t) -> {
             try {
-                return fallible.apply(t);
+                return fallible.call(t);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

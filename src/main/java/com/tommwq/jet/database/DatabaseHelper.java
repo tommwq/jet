@@ -1,7 +1,7 @@
 package com.tommwq.jet.database;
 
 import com.tommwq.jet.datatype.DataType;
-import com.tommwq.jet.function.Call;
+import com.tommwq.jet.routine.Call;
 import com.tommwq.jet.runtime.reflect.ReflectUtils;
 
 import java.lang.reflect.Field;

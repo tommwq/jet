@@ -1,6 +1,6 @@
 package com.tommwq.jet.datatype;
 
-import com.tommwq.jet.function.Call;
+import com.tommwq.jet.routine.Call;
 
 /**
  * 类型转换常用函数类。

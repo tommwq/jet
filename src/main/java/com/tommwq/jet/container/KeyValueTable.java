@@ -1,11 +1,11 @@
 package com.tommwq.jet.container;
 
-import com.tommwq.jet.function.Function;
 import com.tommwq.jet.runtime.reflect.ReflectUtils;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 @SuppressWarnings("unused")
 public class KeyValueTable {

@@ -1,4 +1,4 @@
-package com.tommwq.jet.function;
+package com.tommwq.jet.routine;
 
 /**
  * a procedure may fail.

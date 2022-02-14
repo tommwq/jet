@@ -7,7 +7,7 @@ public class Call<T, R> {
     public Call(FallibleFunction<T, R> function, T t, R value) {
         result = value;
         try {
-            result = function.apply(t);
+            result = function.call(t);
         } catch (Exception e) {
             error = e;
         }

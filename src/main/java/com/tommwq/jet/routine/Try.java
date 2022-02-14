@@ -1,4 +1,4 @@
-package com.tommwq.jet.exception;
+package com.tommwq.jet.routine;
 
 import java.util.ArrayList;
 import java.util.function.Function;

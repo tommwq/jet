@@ -2,8 +2,11 @@ package com.tommwq.jet.system.io;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class IOStreams {
+public class IOUtils {
 
     // 对于GZIPInputStream等输入流，读取时必须按固定大小的块。
     public static void read(InputStream inputStream, byte[] outputBuffer, int offset, int length, int blockSize) throws IOException {
@@ -28,5 +31,17 @@ public class IOStreams {
             remainLength -= n;
             dataLength = Math.min(blockSize, remainLength);
         }
+    }
+
+    public static <T> void print(Stream<T> stream) {
+        System.out.println(String.join(", ", stream.map(x -> x == null ? "null" : x.toString()).collect(Collectors.toList())));
+    }
+
+    public static <T> void print(T[] array) {
+        print(Arrays.stream(array));
+    }
+
+    public static void print(long[] array) {
+        print(Arrays.stream(array).boxed());
     }
 }

@@ -1,29 +1,27 @@
 package com.tommwq.jet.system.thread;
 
-import com.tommwq.jet.function.Call;
-import com.tommwq.jet.function.FallibleProcedure;
+import com.tommwq.jet.routine.Call;
+import com.tommwq.jet.routine.FallibleProcedure;
 
 import java.net.URLClassLoader;
 
 public class ThreadUtils {
 
-    public static URLClassLoader classLoader() {
+    public static URLClassLoader getContextClassLoader() {
         return (URLClassLoader) Thread.currentThread().getContextClassLoader();
     }
 
     public static SleepResult sleep(long milliseconds) {
-        SleepResult reason = SleepResult.Timeup;
         try {
             Thread.sleep(milliseconds);
+            return SleepResult.TIMEOUT;
         } catch (InterruptedException e) {
-            reason = SleepResult.Interrupted;
+            return SleepResult.INTERRUPTED;
         }
-
-        return reason;
     }
 
     public static Thread createThread(FallibleProcedure procedure) {
-        return new Thread(() -> new Call(procedure));
+        return new Thread(() -> new Call(() -> procedure.call()));
     }
 
     public static Thread startThread(FallibleProcedure procedure) {
@@ -32,18 +30,16 @@ public class ThreadUtils {
         return thread;
     }
 
-    public static void john(Thread thread) {
-        while (true) {
-            try {
-                thread.join();
-                return;
-            } catch (InterruptedException e) {
-                // ignore
-            }
+    public static void john(Thread thread) throws InterruptedException {
+        try {
+            thread.join();
+            return;
+        } catch (InterruptedException e) {
+            throw e;
         }
     }
 
     public enum SleepResult {
-        Timeup, Interrupted
+        TIMEOUT, INTERRUPTED
     }
 }

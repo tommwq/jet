@@ -1,4 +1,4 @@
-package com.tommwq.jet.function;
+package com.tommwq.jet.routine;
 
 public class Predictor {
     /**

@@ -3,7 +3,7 @@ package com.tommwq.jet.runtime.inject;
 import com.tommwq.jet.system.thread.ThreadUtils;
 import com.tommwq.jet.container.Container;
 import com.tommwq.jet.system.io.FileUtils;
-import com.tommwq.jet.function.Call;
+import com.tommwq.jet.routine.Call;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -114,6 +114,6 @@ public class InjectUtils {
     }
 
     public static List<Class> scanAndLoad(String packageName) {
-        return scanAndLoad(packageName, ThreadUtils.classLoader());
+        return scanAndLoad(packageName, ThreadUtils.getContextClassLoader());
     }
 }

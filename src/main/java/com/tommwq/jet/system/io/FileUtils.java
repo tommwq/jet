@@ -1,6 +1,6 @@
 package com.tommwq.jet.system.io;
 
-import com.tommwq.jet.function.Call;
+import com.tommwq.jet.routine.Call;
 
 import java.io.File;
 import java.io.IOException;
