@@ -49,7 +49,7 @@ public class DynamicLinking {
 
     public static String getDynamicLibraryPath() {
         return String.format("%s%d",
-                OperatingSystem.getShortName(),
+                OperatingSystem.getOperatingSystemShortName(),
                 OperatingSystem.is32bit() ? 32 : 64);
     }
 

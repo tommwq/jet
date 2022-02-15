@@ -4,35 +4,35 @@ package com.tommwq.jet.runtime;
  * 返回运行平台操作系统相关信息
  */
 public class OperatingSystem {
-    public static String getOperatingSystem() {
+    public static String getOperatingSystemName() {
         return System.getProperty("os.name");
     }
 
     public static boolean isWindows() {
-        return getOperatingSystem().toLowerCase().contains("windows");
+        return getOperatingSystemName().toLowerCase().contains("windows");
     }
 
     public static boolean isLinux() {
-        return getOperatingSystem().toLowerCase().contains("linux");
+        return getOperatingSystemName().toLowerCase().contains("linux");
     }
 
     public static boolean isMac() {
-        return getOperatingSystem().toLowerCase().contains("mac");
+        return getOperatingSystemName().toLowerCase().contains("mac");
     }
 
-    public static String getArch() {
+    public static String getArchitecture() {
         return System.getProperty("os.arch");
     }
 
     public static boolean is32bit() {
-        return getArch().contains("86");
+        return getArchitecture().contains("86");
     }
 
     public static boolean is64bit() {
-        return getArch().contains("64");
+        return getArchitecture().contains("64");
     }
 
-    public static String getShortName() {
+    public static String getOperatingSystemShortName() {
         if (isWindows()) {
             return "windows";
         } else if (isLinux()) {
@@ -44,7 +44,7 @@ public class OperatingSystem {
     }
 
     public static String getDynamicLibrarySuffix() {
-        switch (getShortName()) {
+        switch (getOperatingSystemShortName()) {
             case "windows":
                 return ".dll";
             case "linux":
@@ -57,7 +57,7 @@ public class OperatingSystem {
     }
 
     public static String getDynamicLibraryPrefix() {
-        switch (getShortName()) {
+        switch (getOperatingSystemShortName()) {
             case "linux":
                 return "lib";
             default:

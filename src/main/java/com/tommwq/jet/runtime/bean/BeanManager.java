@@ -1,7 +1,8 @@
 package com.tommwq.jet.runtime.bean;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Bean 管理器
@@ -11,27 +12,28 @@ public class BeanManager {
     private final Map<Class, Object> beans;
 
     public BeanManager() {
-        beans = new HashMap<>();
+        beans = new ConcurrentHashMap<>();
     }
 
     public BeanManager(Map<Class, Object> aMap) {
-        beans = aMap;
+        beans = new ConcurrentHashMap<>(aMap);
     }
 
-    public Object getBean(Class clazz) {
-        return beans.get(clazz);
+    public <T> Optional<T> findBean(Class<? extends T> clazz) {
+        return Optional.ofNullable((T) beans.get(clazz));
     }
 
     public void setBean(Class clazz, Object object) {
         beans.put(clazz, object);
     }
 
-    public Object getOrCreateBean(Class clazz) throws InstantiationException, IllegalAccessException {
-        if (beans.containsKey(clazz)) {
-            return beans.get(clazz);
+    public <T> T getBean(Class<? extends T> clazz) throws InstantiationException, IllegalAccessException {
+        Optional<T> bean = findBean(clazz);
+        if (bean.isPresent()) {
+            return bean.get();
         }
 
-        Object instance = clazz.newInstance();
+        T instance = clazz.newInstance();
         beans.put(clazz, instance);
         return instance;
     }
