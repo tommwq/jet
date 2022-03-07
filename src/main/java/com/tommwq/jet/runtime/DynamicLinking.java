@@ -73,7 +73,7 @@ public class DynamicLinking {
      *
      * @param library 库名字
      */
-    public void loadLibrary(String library) throws IOException, NoSuchFieldException, IllegalAccessException {
+    public void loadLibrary(String library) throws IOException, NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
         if (loadedLibraries.contains(library)) {
             return;
         }
@@ -95,17 +95,41 @@ public class DynamicLinking {
             Files.copy(inputStream, dynamicLibraryFile.toPath());
         }
 
-        // 下面的代码只在 Java 8 上验证过。其他版本的 Java 可能不支持。
+        appendUserClasspath(targetDirectory);
+        System.loadLibrary(library);
+
+        loadedLibraries.add(library);
+    }
+
+    public static void appendUserClasspath(File directory) throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
+        JavaVersion version = JavaVersion.getJavaVersion();
+        if ("8".equals(version.getMajor())) {
+            appendUserClasspath_Java8(directory);
+        } else if ("17".equals(version.getMajor())) {
+            appendUserClasspath_Java17(directory);
+        } else {
+            throw new RuntimeException("unsupported java version");
+        }
+    }
+
+    private static void appendUserClasspath_Java17(File directory) throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
+        Class klass = Class.forName("jdk.internal.loader.NativeLibraries$LibraryPaths");
+        Field field = klass.getDeclaredField("USER_PATHS");
+        boolean originalAccessible = field.isAccessible();
+        field.setAccessible(true);
+        String[] USER_PATHS = (String[]) field.get(null);
+        String[] newUSER_PATHS = append(USER_PATHS, directory.getAbsolutePath());
+        field.set(null, newUSER_PATHS);
+        field.setAccessible(originalAccessible);        
+    }
+
+    private static void appendUserClasspath_Java8(File directory) throws NoSuchFieldException, IllegalAccessException {
         Field field = ClassLoader.class.getDeclaredField("usr_paths");
         boolean originalAccessible = field.isAccessible();
         field.setAccessible(true);
         String[] usrPaths = (String[]) field.get(null);
-        String[] newUsrPaths = append(usrPaths, targetDirectory.getAbsolutePath());
+        String[] newUsrPaths = append(usrPaths, directory.getAbsolutePath());
         field.set(null, newUsrPaths);
-        field.setAccessible(originalAccessible);
-
-        System.loadLibrary(library);
-
-        loadedLibraries.add(library);
+        field.setAccessible(originalAccessible);        
     }
 }
