@@ -69,4 +69,22 @@ public class Text {
     public static boolean isSubstring(String str, String pattern) {
         return isSubstring(str, pattern, 0);
     }
+
+    /**
+     * 判断字符串中是否包含非 ASCII 字符。
+     *
+     * @param text 字符串。
+     * @return 是否包含非 ASCII 字符。
+     */
+    public static boolean containNonAscii(String text) {
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text.charAt(i);
+            if (ch > 255) {
+                return true;
+            }
+
+        }
+
+        return false;
+    }
 }
