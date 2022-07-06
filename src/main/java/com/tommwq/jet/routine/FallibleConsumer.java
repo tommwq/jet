@@ -7,5 +7,5 @@ package com.tommwq.jet.routine;
  */
 @FunctionalInterface
 public interface FallibleConsumer<T> {
-    void call(T input) throws Exception;
+  void call(T input) throws Exception;
 }

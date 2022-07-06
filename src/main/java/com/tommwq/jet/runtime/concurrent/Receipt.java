@@ -7,65 +7,65 @@ import java.util.concurrent.CompletableFuture;
  */
 public class Receipt {
 
-    private final long id;
-    private final Object request;
-    private final CompletableFuture response = new CompletableFuture();
+  private final long id;
+  private final Object request;
+  private final CompletableFuture response = new CompletableFuture();
 
-    //private volatile boolean isDone = false;
+  //private volatile boolean isDone = false;
 
-    protected Receipt(long id, Object request) {
-        this.id = id;
-        this.request = request;
+  protected Receipt(long id, Object request) {
+    this.id = id;
+    this.request = request;
+  }
+
+  public long id() {
+    return id;
+  }
+
+  /*
+    public boolean isDone() {
+    return isDone;
     }
+  */
 
-    public long id() {
-        return id;
+  public Object request() {
+    return request;
+  }
+
+  public void response(Object resp) {
+    response.complete(resp);
+  }
+
+  public CompletableFuture response() {
+    return response;
+  }
+
+  /*
+    public void join() throws TimeoutException, InterruptedException {
+    while (!isDone) {
+    sleep();
     }
-
-        /*
-        public boolean isDone() {
-                return isDone;
-        }
-        */
-
-    public Object request() {
-        return request;
     }
-
-    public void response(Object resp) {
-        response.complete(resp);
-    }
-
-    public CompletableFuture response() {
-        return response;
-    }
-
-        /*
-        public void join() throws TimeoutException, InterruptedException {
-                while (!isDone) {
-                        sleep();
-                }
-        }
         
-        public void join(long timeoutMillis) throws TimeoutException, InterruptedException {
-                long start = System.currentTimeMillis();
+    public void join(long timeoutMillis) throws TimeoutException, InterruptedException {
+    long start = System.currentTimeMillis();
                 
-                while (true) {
-                        if (isDone) {
-                                break;
-                        }
+    while (true) {
+    if (isDone) {
+    break;
+    }
 
-                        if (System.currentTimeMillis() - start > timeoutMillis) {
-                                throw new TimeoutException();
-                        }
+    if (System.currentTimeMillis() - start > timeoutMillis) {
+    throw new TimeoutException();
+    }
 
-                        sleep();
-                }
-                System.out.println(response);
-        }
+    sleep();
+    }
+    System.out.println(response);
+    }
 
-        private void sleep() throws InterruptedException {
-                Thread.sleep(30);
-        }
-        */
+    private void sleep() throws InterruptedException {
+    Thread.sleep(30);
+    }
+  */
 }

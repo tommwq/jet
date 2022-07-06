@@ -8,18 +8,18 @@ import java.util.Optional;
  * @param <T> 结果类型
  */
 public interface AsyncResult<T> {
-    /**
-     * 获得结果
-     *
-     * @return
-     */
-    Optional<T> getResult();
+  /**
+   * 获得结果
+   *
+   * @return
+   */
+  Optional<T> getResult();
 
-    Optional<Throwable> getException();
+  Optional<Throwable> getException();
 
-    boolean isSuccess();
+  boolean isSuccess();
 
-    boolean isFailure();
+  boolean isFailure();
 
-    boolean isFinished();
+  boolean isFinished();
 }

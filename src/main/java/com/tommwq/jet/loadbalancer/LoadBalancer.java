@@ -8,11 +8,11 @@ import java.util.List;
  */
 public interface LoadBalancer<T> {
 
-    T peek();
+  T peek();
 
-    void initialize(List<T> list);
+  void initialize(List<T> list);
 
-    void add(T t);
+  void add(T t);
 
-    void remove(T t);
+  void remove(T t);
 }

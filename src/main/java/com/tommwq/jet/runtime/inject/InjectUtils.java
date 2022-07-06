@@ -18,102 +18,102 @@ import java.util.stream.Collectors;
 
 public class InjectUtils {
 
-    /**
-     * scan java class names under directory
-     */
-    public static List<String> scanDirectory(File root, String packageName) throws IOException {
-        List<String> result = new ArrayList<>();
+  /**
+   * scan java class names under directory
+   */
+  public static List<String> scanDirectory(File root, String packageName) throws IOException {
+    List<String> result = new ArrayList<>();
 
-        List<File> descendants = FileUtils.walk(root.toPath());
-        for (File file : descendants) {
-            if (!file.getName().endsWith(".class")) {
-                continue;
-            }
+    List<File> descendants = FileUtils.walk(root.toPath());
+    for (File file : descendants) {
+      if (!file.getName().endsWith(".class")) {
+        continue;
+      }
 
-            String relativeName = file.getAbsolutePath().replace(root.getAbsolutePath(), "");
-            if (relativeName.startsWith("\\")) {
-                relativeName = relativeName.substring(1);
-            }
-            if (relativeName.startsWith("/")) {
-                relativeName = relativeName.substring(1);
-            }
+      String relativeName = file.getAbsolutePath().replace(root.getAbsolutePath(), "");
+      if (relativeName.startsWith("\\")) {
+        relativeName = relativeName.substring(1);
+      }
+      if (relativeName.startsWith("/")) {
+        relativeName = relativeName.substring(1);
+      }
 
-            String className = getClassNameFromFileName(relativeName);
-            if (!className.startsWith(packageName)) {
-                continue;
-            }
+      String className = getClassNameFromFileName(relativeName);
+      if (!className.startsWith(packageName)) {
+        continue;
+      }
 
-            result.add(className);
-        }
-
-        return result;
+      result.add(className);
     }
 
-    /**
-     * scan java class names in a jar file
-     */
-    public static List<String> scanJar(File jarFile, String packageName) throws IOException {
-        List<String> result = new ArrayList<>();
+    return result;
+  }
 
-        JarInputStream jarStream = new JarInputStream(new FileInputStream(jarFile));
-        for (JarEntry jarEntry = jarStream.getNextJarEntry();
-             jarEntry != null;
-             jarEntry = jarStream.getNextJarEntry()) {
+  /**
+   * scan java class names in a jar file
+   */
+  public static List<String> scanJar(File jarFile, String packageName) throws IOException {
+    List<String> result = new ArrayList<>();
 
-            if (jarEntry.isDirectory()) {
-                continue;
-            }
+    JarInputStream jarStream = new JarInputStream(new FileInputStream(jarFile));
+    for (JarEntry jarEntry = jarStream.getNextJarEntry();
+         jarEntry != null;
+         jarEntry = jarStream.getNextJarEntry()) {
 
-            String entryName = jarEntry.getName();
-            if (!entryName.endsWith(".class")) {
-                continue;
-            }
+      if (jarEntry.isDirectory()) {
+        continue;
+      }
 
-            String className = getClassNameFromFileName(entryName);
-            if (!className.startsWith(packageName)) {
-                continue;
-            }
+      String entryName = jarEntry.getName();
+      if (!entryName.endsWith(".class")) {
+        continue;
+      }
 
-            result.add(className);
-        }
+      String className = getClassNameFromFileName(entryName);
+      if (!className.startsWith(packageName)) {
+        continue;
+      }
 
-        return result;
+      result.add(className);
     }
 
-    public static String getClassNameFromFileName(String classFileName) {
-        return classFileName.replace("/", ".")
-                .replace("\\", ".")
-                .replace(".class", "");
+    return result;
+  }
+
+  public static String getClassNameFromFileName(String classFileName) {
+    return classFileName.replace("/", ".")
+      .replace("\\", ".")
+      .replace(".class", "");
+  }
+
+  public static List<Class> scanAndLoad(String packageName, URLClassLoader classLoader) {
+    List<String> classNameList = new ArrayList<>();
+    for (URL path : classLoader.getURLs()) {
+      File file = new File(path.getFile());
+
+      if (file.isFile()) {
+        classNameList.addAll((List<String>) new Call((Void) -> InjectUtils.scanJar(file, packageName),
+                                                     null,
+                                                     Container.list()).result());
+      }
+
+      if (file.isDirectory()) {
+        classNameList.addAll((List<String>) new Call((Void) -> InjectUtils.scanDirectory(file, packageName),
+                                                     null,
+                                                     Container.list()).result());
+      }
     }
 
-    public static List<Class> scanAndLoad(String packageName, URLClassLoader classLoader) {
-        List<String> classNameList = new ArrayList<>();
-        for (URL path : classLoader.getURLs()) {
-            File file = new File(path.getFile());
+    return classNameList.stream()
+      .map(name -> (Class) new Call((Void) -> classLoader.loadClass(name),
+                                    null,
+                                    null)
+           .result())
+      .filter(clazz -> clazz != null)
+      .collect(Collectors.toList());
+  }
 
-            if (file.isFile()) {
-                classNameList.addAll((List<String>) new Call((Void) -> InjectUtils.scanJar(file, packageName),
-                        null,
-                        Container.list()).result());
-            }
-
-            if (file.isDirectory()) {
-                classNameList.addAll((List<String>) new Call((Void) -> InjectUtils.scanDirectory(file, packageName),
-                        null,
-                        Container.list()).result());
-            }
-        }
-
-        return classNameList.stream()
-                .map(name -> (Class) new Call((Void) -> classLoader.loadClass(name),
-                        null,
-                        null)
-                        .result())
-                .filter(clazz -> clazz != null)
-                .collect(Collectors.toList());
-    }
-
-    public static List<Class> scanAndLoad(String packageName) {
-        return scanAndLoad(packageName, ThreadUtils.getContextClassLoader());
-    }
+  public static List<Class> scanAndLoad(String packageName) {
+    return scanAndLoad(packageName, ThreadUtils.getContextClassLoader());
+  }
 }

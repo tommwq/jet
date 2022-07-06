@@ -10,157 +10,157 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class Agency {
 
-    DispatchThread dispatchThread = new DispatchThread();
-    TimeoutCheckThread timeoutCheckThread = new TimeoutCheckThread();
-    HeartbeatThread heartbeatThread = new HeartbeatThread();
-    private boolean running;
-    private final Map<Long, Context> contextes = new ConcurrentHashMap();
-    private long receiptId = 0;
+  DispatchThread dispatchThread = new DispatchThread();
+  TimeoutCheckThread timeoutCheckThread = new TimeoutCheckThread();
+  HeartbeatThread heartbeatThread = new HeartbeatThread();
+  private boolean running;
+  private final Map<Long, Context> contextes = new ConcurrentHashMap();
+  private long receiptId = 0;
 
-    public Agency() {
+  public Agency() {
+  }
+
+  private long generateReceiptId() {
+    return receiptId++;
+  }
+
+  public Receipt post(Object request) {
+    long rid = generateReceiptId();
+    Receipt receipt = new Receipt(rid, request);
+    contextes.put(receipt.id(), new Context(receipt));
+    send(receipt.id(), request);
+    return receipt;
+  }
+
+  public void start() {
+    connect();
+    login();
+
+    running = true;
+
+    dispatchThread.start();
+    timeoutCheckThread.start();
+    heartbeatThread.start();
+  }
+
+  public void stop() {
+    running = false;
+    logoff();
+    disconnect();
+
+    dispatchThread.interrupt();
+    timeoutCheckThread.interrupt();
+    Thread.interrupted();
+  }
+
+  public Optional<Context> getContext(long rid) {
+    if (!contextes.containsKey(rid)) {
+      return Optional.ofNullable(null);
     }
+    return Optional.of(contextes.get(rid));
+  }
 
-    private long generateReceiptId() {
-        return receiptId++;
+  public Optional<Object> getContext(long rid, String key) {
+    if (!contextes.containsKey(rid)) {
+      return Optional.ofNullable(null);
     }
+    return contextes.get(rid).find(key);
+  }
 
-    public Receipt post(Object request) {
-        long rid = generateReceiptId();
-        Receipt receipt = new Receipt(rid, request);
-        contextes.put(receipt.id(), new Context(receipt));
-        send(receipt.id(), request);
-        return receipt;
+  public void setContext(long rid, String key, Object value) {
+    Optional<Context> ctx = getContext(rid);
+    if (!ctx.isPresent()) {
+      return;
     }
+    ctx.get().put(key, value);
+  }
 
-    public void start() {
-        connect();
-        login();
+  public void removeContext(long rid) {
+    contextes.remove(rid);
+  }
 
-        running = true;
-
-        dispatchThread.start();
-        timeoutCheckThread.start();
-        heartbeatThread.start();
-    }
-
-    public void stop() {
-        running = false;
-        logoff();
-        disconnect();
-
-        dispatchThread.interrupt();
-        timeoutCheckThread.interrupt();
-        Thread.interrupted();
-    }
-
-    public Optional<Context> getContext(long rid) {
-        if (!contextes.containsKey(rid)) {
-            return Optional.ofNullable(null);
+  public void receiveAndDispatchCycle() {
+    while (running) {
+      try {
+        boolean received = receive();
+        if (!received) {
+          sleep();
         }
-        return Optional.of(contextes.get(rid));
+      } catch (InterruptedException e) {
+        break;
+      }
     }
+  }
 
-    public Optional<Object> getContext(long rid, String key) {
-        if (!contextes.containsKey(rid)) {
-            return Optional.ofNullable(null);
+  public void heartbeatCycle() {
+    while (running) {
+      try {
+        System.out.println("HEARTBEAT");
+        heartbeat();
+        sleep();
+      } catch (Exception e) {
+        if (!running) {
+          break;
         }
-        return contextes.get(rid).find(key);
+      }
     }
+  }
 
-    public void setContext(long rid, String key, Object value) {
-        Optional<Context> ctx = getContext(rid);
-        if (!ctx.isPresent()) {
-            return;
-        }
-        ctx.get().put(key, value);
+  public abstract void connect();
+
+  public abstract void send(long receiptId, Object request);
+
+  public abstract boolean receive() throws InterruptedException;
+
+  public void disconnect() {
+  }
+
+  public void login() {
+  }
+
+  public void heartbeat() throws Exception {
+  }
+
+  public void logoff() {
+  }
+
+  public void sleep() throws InterruptedException {
+    Thread.sleep(100);
+  }
+
+  public void timeoutCheckCycle() {
+    while (running) {
+      /* TODO
+         lock
+         checkTimeout
+         unlock
+      */
+      try {
+        sleep();
+      } catch (InterruptedException e) {
+        // ignore
+      }
     }
+  }
 
-    public void removeContext(long rid) {
-        contextes.remove(rid);
+  private class DispatchThread extends Thread {
+    public void run() {
+      receiveAndDispatchCycle();
     }
+  }
+  //public void reconnect() {}
 
-    public void receiveAndDispatchCycle() {
-        while (running) {
-            try {
-                boolean received = receive();
-                if (!received) {
-                    sleep();
-                }
-            } catch (InterruptedException e) {
-                break;
-            }
-        }
+  private class TimeoutCheckThread extends Thread {
+    public void run() {
+      timeoutCheckCycle();
     }
+  }
 
-    public void heartbeatCycle() {
-        while (running) {
-            try {
-                System.out.println("HEARTBEAT");
-                heartbeat();
-                sleep();
-            } catch (Exception e) {
-                if (!running) {
-                    break;
-                }
-            }
-        }
+  public class HeartbeatThread extends Thread {
+    public void run() {
+      heartbeatCycle();
     }
-
-    public abstract void connect();
-
-    public abstract void send(long receiptId, Object request);
-
-    public abstract boolean receive() throws InterruptedException;
-
-    public void disconnect() {
-    }
-
-    public void login() {
-    }
-
-    public void heartbeat() throws Exception {
-    }
-
-    public void logoff() {
-    }
-
-    public void sleep() throws InterruptedException {
-        Thread.sleep(100);
-    }
-
-    public void timeoutCheckCycle() {
-        while (running) {
-                        /* TODO
-                           lock
-                           checkTimeout
-                           unlock
-                        */
-            try {
-                sleep();
-            } catch (InterruptedException e) {
-                // ignore
-            }
-        }
-    }
-
-    private class DispatchThread extends Thread {
-        public void run() {
-            receiveAndDispatchCycle();
-        }
-    }
-    //public void reconnect() {}
-
-    private class TimeoutCheckThread extends Thread {
-        public void run() {
-            timeoutCheckCycle();
-        }
-    }
-
-    public class HeartbeatThread extends Thread {
-        public void run() {
-            heartbeatCycle();
-        }
-    }
+  }
 
 
 }

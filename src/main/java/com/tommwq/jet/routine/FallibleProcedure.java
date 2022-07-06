@@ -5,5 +5,5 @@ package com.tommwq.jet.routine;
  */
 @FunctionalInterface
 public interface FallibleProcedure {
-    void call() throws Exception;
+  void call() throws Exception;
 }

@@ -10,20 +10,20 @@ import java.util.function.Predicate;
  * @param <T>
  */
 public class ByFieldFilter<T> implements Predicate<T> {
-    private final String fieldName;
-    private final String targetValue;
+  private final String fieldName;
+  private final String targetValue;
 
-    public ByFieldFilter(String fieldName, Object targetValue) {
-        this.fieldName = fieldName;
-        this.targetValue = String.valueOf(targetValue);
-    }
+  public ByFieldFilter(String fieldName, Object targetValue) {
+    this.fieldName = fieldName;
+    this.targetValue = String.valueOf(targetValue);
+  }
 
-    @Override
-    public boolean test(T t) {
-        try {
-            return targetValue.equals(ReflectUtils.getField(t, fieldName));
-        } catch (Exception e) {
-            return false;
-        }
+  @Override
+  public boolean test(T t) {
+    try {
+      return targetValue.equals(ReflectUtils.getField(t, fieldName));
+    } catch (Exception e) {
+      return false;
     }
+  }
 }

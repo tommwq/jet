@@ -9,43 +9,43 @@ import java.util.Map;
  */
 public interface TwoLevelDictionary<T1, T2, T3> {
 
-    void put(T1 k1, T2 k2, T3 v);
+  void put(T1 k1, T2 k2, T3 v);
 
-    T3 get(T1 k1, T2 k2);
+  T3 get(T1 k1, T2 k2);
 
-    Map<T2, T3> get(T1 k1);
+  Map<T2, T3> get(T1 k1);
 
-    boolean containsKey(T1 k1);
+  boolean containsKey(T1 k1);
 
-    boolean containsKey(T1 k1, T2 k2);
+  boolean containsKey(T1 k1, T2 k2);
 
-    void remove(T1 k1);
+  void remove(T1 k1);
 
-    void remove(T1 k1, T2 k2);
+  void remove(T1 k1, T2 k2);
 
-    void clear();
+  void clear();
 
-    class Entry<T1, T2, T3> {
-        private final T1 k1;
-        private final T2 k2;
-        private final T3 v;
+  class Entry<T1, T2, T3> {
+    private final T1 k1;
+    private final T2 k2;
+    private final T3 v;
 
-        public Entry(T1 k1, T2 k2, T3 v) {
-            this.k1 = k1;
-            this.k2 = k2;
-            this.v = v;
-        }
-
-        public T1 first() {
-            return k1;
-        }
-
-        public T2 second() {
-            return k2;
-        }
-
-        public T3 thrid() {
-            return v;
-        }
+    public Entry(T1 k1, T2 k2, T3 v) {
+      this.k1 = k1;
+      this.k2 = k2;
+      this.v = v;
     }
+
+    public T1 first() {
+      return k1;
+    }
+
+    public T2 second() {
+      return k2;
+    }
+
+    public T3 thrid() {
+      return v;
+    }
+  }
 }

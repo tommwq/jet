@@ -7,43 +7,43 @@ import java.nio.charset.Charset;
 
 public class DelimitedFileReader {
 
-    private final String rowDelimiter;
-    private final String columnDelimiter;
+  private final String rowDelimiter;
+  private final String columnDelimiter;
 
-    public DelimitedFileReader(String aRowDelimiter, String aColumnDelimiter) {
-        if (aRowDelimiter == null || aRowDelimiter.length() == 0) {
-            throw new IllegalArgumentException("row delimiter must not be null or empty");
-        }
-
-        if (aColumnDelimiter == null || aColumnDelimiter.length() == 0) {
-            throw new IllegalArgumentException("column delimiter must not be null or empty");
-        }
-
-        rowDelimiter = aRowDelimiter;
-        columnDelimiter = aColumnDelimiter;
+  public DelimitedFileReader(String aRowDelimiter, String aColumnDelimiter) {
+    if (aRowDelimiter == null || aRowDelimiter.length() == 0) {
+      throw new IllegalArgumentException("row delimiter must not be null or empty");
     }
 
-    public String[][] read(File file) throws IOException {
-        return read(file, Charset.defaultCharset());
+    if (aColumnDelimiter == null || aColumnDelimiter.length() == 0) {
+      throw new IllegalArgumentException("column delimiter must not be null or empty");
     }
 
-    public String[][] read(File file, Charset charset) throws IOException {
-        String content;
+    rowDelimiter = aRowDelimiter;
+    columnDelimiter = aColumnDelimiter;
+  }
 
-        try (FileInputStream inputStream = new FileInputStream(file)) {
-            int dataSize = inputStream.available();
-            byte[] buffer = new byte[dataSize];
-            inputStream.read(buffer);
-            content = new String(buffer, charset);
-        }
+  public String[][] read(File file) throws IOException {
+    return read(file, Charset.defaultCharset());
+  }
 
-        String[] rows = content.split(rowDelimiter);
-        String[][] result = new String[rows.length][];
+  public String[][] read(File file, Charset charset) throws IOException {
+    String content;
 
-        for (int i = 0; i < rows.length; i++) {
-            result[i] = rows[i].split(columnDelimiter);
-        }
-
-        return result;
+    try (FileInputStream inputStream = new FileInputStream(file)) {
+      int dataSize = inputStream.available();
+      byte[] buffer = new byte[dataSize];
+      inputStream.read(buffer);
+      content = new String(buffer, charset);
     }
+
+    String[] rows = content.split(rowDelimiter);
+    String[][] result = new String[rows.length][];
+
+    for (int i = 0; i < rows.length; i++) {
+      result[i] = rows[i].split(columnDelimiter);
+    }
+
+    return result;
+  }
 }

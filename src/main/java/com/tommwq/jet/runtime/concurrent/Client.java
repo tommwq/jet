@@ -9,39 +9,39 @@ import java.util.concurrent.TimeoutException;
  */
 public class Client {
 
-    private final Agency agency;
+  private final Agency agency;
 
-    /**
-     * Client构造函数。
-     *
-     * @param agency 后端服务代理。
-     */
-    public Client(Agency agency) {
-        this.agency = agency;
-    }
+  /**
+   * Client构造函数。
+   *
+   * @param agency 后端服务代理。
+   */
+  public Client(Agency agency) {
+    this.agency = agency;
+  }
 
-    /**
-     * 向服务发送请求。
-     *
-     * @param request       请求。
-     * @param timeoutMillis 超时时间。
-     */
-    public Object request(Object request, long timeoutMillis)
-            throws TimeoutException, InterruptedException, ExecutionException {
-        Receipt receipt = this.agency.post(request);
-        return receipt.response().get(timeoutMillis, TimeUnit.MILLISECONDS);
-    }
+  /**
+   * 向服务发送请求。
+   *
+   * @param request       请求。
+   * @param timeoutMillis 超时时间。
+   */
+  public Object request(Object request, long timeoutMillis)
+    throws TimeoutException, InterruptedException, ExecutionException {
+    Receipt receipt = this.agency.post(request);
+    return receipt.response().get(timeoutMillis, TimeUnit.MILLISECONDS);
+  }
 
-    /**
-     * 向服务发送请求。
-     *
-     * @param request 请求。
-     */
-    public Object request(Object request)
-            throws TimeoutException, InterruptedException, ExecutionException {
+  /**
+   * 向服务发送请求。
+   *
+   * @param request 请求。
+   */
+  public Object request(Object request)
+    throws TimeoutException, InterruptedException, ExecutionException {
 
-        Receipt receipt = this.agency.post(request);
-        return receipt.response().get();
-    }
+    Receipt receipt = this.agency.post(request);
+    return receipt.response().get();
+  }
 }
 

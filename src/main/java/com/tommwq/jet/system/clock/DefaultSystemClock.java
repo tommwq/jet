@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
  */
 public class DefaultSystemClock implements Clock {
 
-    @Override
-    public LocalDateTime getTime() {
-        return LocalDateTime.now();
-    }
+  @Override
+  public LocalDateTime getTime() {
+    return LocalDateTime.now();
+  }
 }

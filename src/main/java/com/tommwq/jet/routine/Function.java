@@ -6,5 +6,5 @@ package com.tommwq.jet.routine;
  */
 @FunctionalInterface
 public interface Function<T, R> {
-    R apply(T arg) throws Exception;
+  R apply(T arg) throws Exception;
 }
